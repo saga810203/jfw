@@ -3,11 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jfw.framework</groupId>
 	<artifactId>jfw</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${project.version}</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>jfw-core</module>
 		<module>jfw-util</module>
 		<module>jfw-webUtil</module>
 	</modules>
+	
+	<properties>
+		<project.version>0.0.1-SNAPSHOT</project.version>
+	</properties>
 </project>

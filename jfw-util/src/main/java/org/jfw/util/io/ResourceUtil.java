@@ -8,7 +8,7 @@ import java.util.Enumeration;
 
 
 public abstract class ResourceUtil {
-    public static <T> T readClassResource(String name,MultiInputStreamHandler<T> handler,ClassLoader cl) throws IOException{
+    public static <T> T readClassResource(String name,MultiInputStreamHandler<T> handler,ClassLoader cl) throws Exception{
         if(cl ==null)cl = ResourceUtil.class.getClassLoader();
         Enumeration<URL> en = cl.getResources(name);
         

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jfw.framework</groupId>
 		<artifactId>jfw</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${project.version}</version>
 	</parent>
 	<artifactId>jfw-webUtil</artifactId>
 	<dependencies>
@@ -12,6 +12,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfw.framework</groupId>
+			<artifactId>jfw-util</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

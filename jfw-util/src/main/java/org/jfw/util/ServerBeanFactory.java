@@ -1,5 +1,6 @@
 package org.jfw.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -17,51 +18,74 @@ import org.jfw.util.sort.DependSortService;
 
 public class ServerBeanFactory {
     public static String CONF_FILE = "jfw_server_conf.properties";
+    public static String CONF_DEPEND_FILE="jfw_server_depends.properties";
 
     private static Map<Class<?>, Object> map = new HashMap<Class<?>, Object>();
     private static LinkedList<Object> servers = new LinkedList<Object>();
+    private static Map<Class<?>, List<Class<?>>> loadDepends() throws Exception {
+        return ResourceUtil.readClassResource(CONF_DEPEND_FILE,
+                new MultiInputStreamHandler<Map<Class<?>, List<Class<?>>>>() {
+                    private Map<Class<?>, List<Class<?>>> depClass = new HashMap<Class<?>, List<Class<?>>>();
+                    private  List<Class<?>> parseClass(String str) throws ClassNotFoundException {
+                        if (str == null || (str.trim().length() == 0))
+                            return null;
+                        List<Class<?>> list = new LinkedList<Class<?>>();
+                        String[] clsnames = str.split(",");
+                        for (String clsname : clsnames) {
+                            if (clsname.trim().length() > 0) {
+                                list.add(Class.forName(clsname));
+                            }
+                        }
+                        return list;
+                    }
+                    public void handle(InputStream in) throws IOException, ClassNotFoundException {
+                        Properties props = new Properties();
+                        props.load(in);
+                        for (Map.Entry<Object, Object> entry : props.entrySet()) {
+                            String key = (String) entry.getKey();
+                            String val = (String) entry.getValue();
+                            Class<?> cls = Class.forName(key.trim());
+                            List<Class<?>> list = parseClass(val);
+                            depClass.put(cls, list);
+                        }
+                    }
+                    public Map<Class<?>, List<Class<?>>> get() {
+                        return depClass;
+                    }
+                }, null);
+    }
 
-    private static Properties load() throws IOException {
-        return ResourceUtil.readClassResource(CONF_FILE, new MultiInputStreamHandler<Properties>() {
-            private Properties props = new Properties();
-
-            public void handle(InputStream in) throws IOException {
-                Properties tmp = new Properties();
-                tmp.load(in);
-                props.putAll(tmp);
+    private static List<Class<?>> load() throws Exception {
+        return ResourceUtil.readClassResource(CONF_FILE, new MultiInputStreamHandler<List<Class<?>>>() {
+            private List<Class<?>> list = new LinkedList<Class<?>>();       
+            public void handle(InputStream in) throws Exception {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                int len = 0;
+                byte[] buf = new byte[4096];
+                while ((len = in.read(buf)) >= 0) {
+                    os.write(buf, 0, len);
+                }
+                String content = new String(os.toByteArray(), ConstData.UTF8);
+                String[] strs = content.split("\n");
+                for (String s : strs) {
+                    s = s.trim();
+                    if (s.length() > 0)
+                        list.add(Class.forName(s));
+                }
             }
-
-            public Properties get() {
-                return props;
+            public List<Class<?>> get() {
+                return list;
             }
         }, null);
     }
+    
 
-    private static void parseClass(String str, List<Class<?>> list) throws ClassNotFoundException {
-        if (str == null || (str.trim().length() == 0))
-            return;
-        String[] clsnames = str.split(",");
-        for (String clsname : clsnames) {
-            if (clsname.trim().length() > 0) {
-                list.add(Class.forName(clsname));
-            }
-        }
-    }
 
-    private static List<Class<?>> readClass() throws IOException, ClassNotFoundException {
-        Properties props = load();
-        List<Class<?>> list = new LinkedList<Class<?>>();
+    private static List<Class<?>> readClass() throws Exception {
+        Map<Class<?>,List<Class<?>>> depClass = loadDepends();        
         DependSortService<Class<?>> dss = new DependSortService<Class<?>>();
-        for (Map.Entry<Object, Object> entry : props.entrySet()) {
-            String key = (String) entry.getKey();
-            String val = (String) entry.getValue();
-            Class<?> cls = Class.forName(key.trim());
-            list.clear();
-            parseClass(val, list);
-            dss.add(cls, list);
-        }
+       dss.add(load(), depClass);
         return dss.sort();
-
     }
 
     private static void startup(Object obj) throws IllegalAccessException, IllegalArgumentException,
@@ -90,10 +114,15 @@ public class ServerBeanFactory {
     }
 
     public static void shutdown() {
+        LinkedList<Object> list = new LinkedList<Object>();
+        
         while (servers.size() > 0) {
             Object obj = servers.pollLast();
             shutdown(obj);
-            destroy(obj);
+            list .add(obj);
+        }
+        while(list.size()>0){
+            destroy(list.pollFirst());
         }
         map.clear();
     }

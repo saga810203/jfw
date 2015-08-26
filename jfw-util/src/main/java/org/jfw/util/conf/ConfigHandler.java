@@ -23,7 +23,7 @@ import org.jfw.util.reflect.Utils;
 public abstract class ConfigHandler {
     private static final String STATIC_CONFIG_FILE="jfw_config.properties";
     
-    private static Properties load() throws IOException
+    private static Properties load() throws Exception
     {
         return ResourceUtil.readClassResource(STATIC_CONFIG_FILE, new MultiInputStreamHandler<Properties>() {
             private Properties props = new Properties();
