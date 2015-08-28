@@ -1,31 +1,49 @@
 package org.jfw.core.code.generator.enums;
+
+import org.jfw.core.code.generator.PreparedStatementSetHandler;
+import org.jfw.core.code.generator.ResultSetGetHandler;
+import org.jfw.core.code.generator.impl.StringGet;
+import org.jfw.core.code.generator.impl.StringSet;
+
 /**
  * DataElement
+ * 
  * @author pengjia
  *
  */
 public enum DE {
-	
-	
-	ID("000001","CHAR",32,-1);
-	
-	private DE(String id,String typeForDataBase,int length,int secondlength)
-	{
+
+	STRING_VARCHAR("DA0001", "CHAR", 255, -1,true,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
+	NN_STRING_VARCHAR("DA0002", "CHAR", 255, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class);
+//	int_INTEGER
+
+	private DE(String id, String typeForDataBase, int length, int secondlength,
+			boolean nullable,boolean canFilter,
+			boolean inSelect, boolean inInsert,
+			String defaultSqlValueForInsert, boolean inUpdate,
+			String defaultSqlValueForUpdate, Class<? extends ResultSetGetHandler> readClass,
+			Class<? extends PreparedStatementSetHandler> writeClass,Class<?> fieldClass) {
 		this.id = id;
 		this.typeForDataBase = typeForDataBase;
 		this.length = length;
 		this.secondlength = secondlength;
+		this.nullable = nullable;
+		this.canFilter = canFilter;
+		this.inSelect = inSelect;
+		this.inInsert = inInsert;
+		this.defaultSqlValueForInsert = defaultSqlValueForInsert;
+		this.inUpdate = inUpdate;
+		this.defaultSqlValueForUpdate = defaultSqlValueForUpdate;
+		this.readClass= readClass;
+		this.writeClass = writeClass;
+		this.fieldClass = fieldClass;
 	}
 	private String id;
 	/**
-	 *  用于数据库建表的字段描述，
-	 *  if (length <0 && secondlength <0){
-	 *  create table XXXXXX   columnName  typeForDataBase;
-	 *  } if ( secondlength <0){
-	 *  create table XXXXXX    columnName  typeForDataBase(length);
-	 *  }else{
-	 *  create table XXXXXX    columnName  typeForDataBase(length,secondLength);
-	 *  }
+	 * 用于数据库建表的字段描述， if (length <0 && secondlength <0){ create table XXXXXX
+	 * columnName typeForDataBase; } if ( secondlength <0){ create table XXXXXX
+	 * columnName typeForDataBase(length); }else{ create table XXXXXX columnName
+	 * typeForDataBase(length,secondLength); }
 	 */
 	private String typeForDataBase;
 	private int length;
@@ -35,10 +53,6 @@ public enum DE {
 	 */
 	private boolean nullable;
 	/**
-	 * 对实字段的java类型
-	 */
-	private Class<?> clszz;
-	/**
 	 * 是否可以用在Where 语句中
 	 */
 	private boolean canFilter;
@@ -47,16 +61,6 @@ public enum DE {
 	 */
 	private boolean inSelect;
 	/**
-	 * 利用ResultSet取值的表达式
-	 * 如：
-	 *      rs.getInt(IndexDesc)
-	 *      "1".equals(rs.getString(IndexDesc))      
-	 *      
-	 *      
-	 *      其中 :IndexDesc用于替换,rs是在方法中的ResultSet的局部变量名
-	 */
-	private String expressionForGetter;
-	/**
 	 * 是存在Insert语句中
 	 */
 	private boolean inInsert;
@@ -64,37 +68,52 @@ public enum DE {
 	 * 在insert语句中sql的默认值
 	 */
 	private String defaultSqlValueForInsert;
-	/**
-	 * 利用PreparedStatement赋值的表达式
-	 * 如：
-	 *      ps.setInt($IndexDesc,$SQLVAL)
-	 *      ps.setString($IndexDesc,$SQLVAL?"1":"0")
-	 *           
-	 *      
-	 *      其中 :$IndexDesc用于替换,ps是在方法中的PreparedStatement的局部变量名
-	 */
-	private String expressionForSetter;
-	/**
-	 * 利用PreparedStatement赋NULL的表达式
-	 * 如：
-	 *      ps.setNull($IndexDesc,java.sql.Types.INTEGER)
-	 *           
-	 *      
-	 *      其中 :$IndexDesc用于替换,ps是在方法中的PreparedStatement的局部变量名
-	 */
-	private String expressionForNullSetter;
-	
 	private boolean inUpdate;
-	
 	private String defaultSqlValueForUpdate;
+	private Class<? extends ResultSetGetHandler> readClass;
+	private Class<? extends PreparedStatementSetHandler> writeClass;
+	private Class<?> fieldClass;
 	
-	
-	
-	
-	
-	
-	
-    
-	
-
+	public Class<?> getFieldClass() {
+		return fieldClass;
+	}
+	public String getId() {
+		return id;
+	}
+	public String getTypeForDataBase() {
+		return typeForDataBase;
+	}
+	public int getLength() {
+		return length;
+	}
+	public int getSecondlength() {
+		return secondlength;
+	}
+	public boolean isNullable() {
+		return nullable;
+	}
+	public boolean isCanFilter() {
+		return canFilter;
+	}
+	public boolean isInSelect() {
+		return inSelect;
+	}
+	public boolean isInInsert() {
+		return inInsert;
+	}
+	public String getDefaultSqlValueForInsert() {
+		return defaultSqlValueForInsert;
+	}
+	public boolean isInUpdate() {
+		return inUpdate;
+	}
+	public String getDefaultSqlValueForUpdate() {
+		return defaultSqlValueForUpdate;
+	}
+	public Class<? extends ResultSetGetHandler> getReadClass() {
+		return readClass;
+	}
+	public Class<? extends PreparedStatementSetHandler> getWriteClass() {
+		return writeClass;
+	}
 }

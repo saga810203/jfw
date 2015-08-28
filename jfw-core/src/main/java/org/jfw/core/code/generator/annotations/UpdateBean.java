@@ -5,10 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PO {
-	String name();
-	boolean readonly() default false;
-	boolean enableDeleted() default true;
+public @interface UpdateBean {
+	boolean dynamic() default false;
 }

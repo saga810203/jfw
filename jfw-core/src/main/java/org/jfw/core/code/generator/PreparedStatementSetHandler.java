@@ -1,39 +1,29 @@
 package org.jfw.core.code.generator;
 
-import java.lang.reflect.Field;
-
-import org.jfw.core.code.generator.annotations.DBField;
-import org.jfw.core.code.generator.enums.DE;
-
 public interface PreparedStatementSetHandler {
-	void init(DE de, String expressionForGetValue);
+	void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType);
 	
+	//在赋值之前调用：如生成BLOB,
+	String codeBeforWriteValue();
 	/**
-	 * 生成的代码(在动态生成update Sql时使用)
-	 * 依赖的局部变量
-	 * StringBulider usql
-	 * 
-	 *   String  $UUID$ = expressionForGetValue;
-	 *   if(null==$UUID$)
-	 *   {
-	 *   	usql.append("$COLUMN_NAME$=?,");
-	 *   }
-	 *   
-	 *   
+	 * 只在insert,update set a=? 中使用
+	 * @return
 	 */
-	String codeForUpdateValueSelectiveSQL(String columnName);
-	/**
-	 * 同上
-	 * $COLUMN_NAME=?,
-	 * $COLUMN_NAME=""
+	String wirteValue();
+	/*
+	 * 在where 中 
 	 */
-	String codeForUpdateSQL(String columnName);
+	String wirteNotNullValue();
+	/*
+	 *在可能不用赋值的地方使用 
+	 *如动态生成SQL的赋值时用
+	 */
+	String wirteValueWithCheck();
+	//在赋值之后调用:释放BLOB
+	String codeAfterWriteValue();
 	
-	String 
 	
-	
-	
-	
-	
-
+	String codeBeginCheckInSetOrWhere();
+	String codeELESCheckInSetOrWhere();
+	String codeEndCheckInSetOrWhere();
 }
