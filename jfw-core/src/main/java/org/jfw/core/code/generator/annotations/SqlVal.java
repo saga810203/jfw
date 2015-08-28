@@ -1,7 +1,13 @@
 package org.jfw.core.code.generator.annotations;
 
-import org.jfw.core.code.generator.enums.DE;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
+import org.jfw.core.code.generator.enums.DE;
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
 public @interface SqlVal {
 	/**
 	 * 赋值时使用，指定参数据名称  参数按顺序为 con,param1,param2,param3,param4,param4..........

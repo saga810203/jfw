@@ -28,60 +28,54 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 			sb.append(this.javaType.getName()).append(" ").append(this.local).append("=").append(this.el4Read).append(";");
 		}
 	}
-	public String codeBeforWriteValue() {
+	public void codeBeforWriteValue(StringBuilder sb) {
 //		if (this.getClass4Value().isPrimitive()) return "";
 //		StringBuilder sb = new StringBuilder();
 //		this.checkLocal(sb);
 //		return sb.toString();
-		return "";
+//		return "";
 	}
 
-	public String wirteValue() {
+	public void wirteValue(StringBuilder sb) {
 		if(this.javaType.isPrimitive())
 		{
-			return this.wirteNotNullValue();
+			 this.wirteNotNullValue(sb);
+			 return;
 		}
-		StringBuilder sb = new StringBuilder();
 		this.checkLocal(sb);
 		sb.append("if(null==").append(this.local).append("){")
 		    .append("  ps.").append(this.getMethodName4JDBCWrite()).append("(paramIndex++,").append(this.local).append(");")
 		    .append("}else{")
 		    .append("  ps.setNull(paramIndex++,").append(this.getJdbcType()).append(");")
 		    .append("}");
-		return sb.toString();		
 	}
 
-	public String wirteNotNullValue() {
+	public void wirteNotNullValue(StringBuilder sb) {
 		
-		return "ps."+this.getMethodName4JDBCWrite()+"(paramIndex++,"+this.el4Read+");";
+		 sb.append("ps."+this.getMethodName4JDBCWrite()+"(paramIndex++,"+this.el4Read+");");
 	}
 
-	public String wirteValueWithCheck() {
-		StringBuilder sb = new StringBuilder();
+	public  void wirteValueWithCheck(StringBuilder sb) {
 		this.checkLocal(sb);
 		sb.append("if(nul!=").append(this.local).append("){")
 		    .append("  ps.setNull(paramIndex++,").append(this.getJdbcType()).append(");")
 		    .append("}");
-		return sb.toString();	
 	}
 
-	public String codeAfterWriteValue() {
-		return "";
+	public void codeAfterWriteValue(StringBuilder sb) {
 	}
 
-	public String codeBeginCheckInSetOrWhere() {
-		StringBuilder sb = new StringBuilder();
+	public void codeBeginCheckInSetOrWhere(StringBuilder sb) {
 		this.checkLocal(sb);
 		sb.append("if(nul!=").append(this.local).append("){");
-		return sb.toString();	
 	}
 
-	public String codeELESCheckInSetOrWhere() {
-		return "}else{";
+	public void codeELESCheckInSetOrWhere(StringBuilder sb) {
+		sb.append("}else{");
 	}
 
-	public String codeEndCheckInSetOrWhere() {
-		return "}";
+	public void codeEndCheckInSetOrWhere(StringBuilder sb) {
+		sb.append("}");
 	}
 
 }

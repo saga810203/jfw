@@ -40,9 +40,8 @@ public abstract class AbstractGetHandler implements ResultSetGetHandler {
 		this.nullable = nullable;
 		this.javaType = javaType;
 	}
-
-	public String readValue() {
-		StringBuilder sb = new StringBuilder();
+    @Override
+	public void readValue(StringBuilder sb) {
 		if (this.nullable && (!this.javaType.isPrimitive())) {
 			String local = Utils.getLocalVarName();
 			sb.append(this.javaType.getName()).append(" ").append(local).append(" =").append(this.el4Read).append(";")
@@ -53,7 +52,6 @@ public abstract class AbstractGetHandler implements ResultSetGetHandler {
 		} else {			
 			sb.append(this.el4Write).append("(").append(this.el4Read)	.append(");");
 		}
-		return sb.toString();
 	}
 
 }

@@ -4,26 +4,26 @@ public interface PreparedStatementSetHandler {
 	void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType);
 	
 	//在赋值之前调用：如生成BLOB,
-	String codeBeforWriteValue();
+	void codeBeforWriteValue(StringBuilder sb);
 	/**
 	 * 只在insert,update set a=? 中使用
 	 * @return
 	 */
-	String wirteValue();
+	void wirteValue(StringBuilder sb);
 	/*
 	 * 在where 中 
 	 */
-	String wirteNotNullValue();
+	void wirteNotNullValue(StringBuilder sb);
 	/*
 	 *在可能不用赋值的地方使用 
 	 *如动态生成SQL的赋值时用
 	 */
-	String wirteValueWithCheck();
+	void wirteValueWithCheck(StringBuilder sb);
 	//在赋值之后调用:释放BLOB
-	String codeAfterWriteValue();
+	void codeAfterWriteValue(StringBuilder sb);
 	
 	
-	String codeBeginCheckInSetOrWhere();
-	String codeELESCheckInSetOrWhere();
-	String codeEndCheckInSetOrWhere();
+	void codeBeginCheckInSetOrWhere(StringBuilder sb);
+	void codeELESCheckInSetOrWhere(StringBuilder sb);
+	void codeEndCheckInSetOrWhere(StringBuilder sb);
 }
