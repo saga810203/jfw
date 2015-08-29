@@ -3,12 +3,12 @@ package org.jfw.core.code.generator.impl;
 import org.jfw.core.code.generator.PreparedStatementSetHandler;
 
 public abstract class AbstractSetHandler implements PreparedStatementSetHandler {
-	private String el4Read;
-	private Class<?> javaType;
-	private String local = null;
+	protected String el4Read;
+	protected Class<?> javaType;
+	protected String local = null;
 	
-	protected abstract String getMethodName4JDBCWrite();
-	protected abstract int getJdbcType();
+	protected  abstract String getMethodName4JDBCWrite();
+	protected  abstract int getJdbcType();
 	
 	
 	
@@ -22,7 +22,7 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 		}
 		this.javaType = javaType;
 	}
-	private void checkLocal(StringBuilder sb){
+	protected void checkLocal(StringBuilder sb){
 		if(null==this.local){
 			local=Utils.getLocalVarName();
 			sb.append(this.javaType.getName()).append(" ").append(this.local).append("=").append(this.el4Read).append(";");
@@ -58,7 +58,7 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 	public  void wirteValueWithCheck(StringBuilder sb) {
 		this.checkLocal(sb);
 		sb.append("if(nul!=").append(this.local).append("){")
-		    .append("  ps.setNull(paramIndex++,").append(this.getJdbcType()).append(");")
+		    .append("  ps.").append(this.getMethodName4JDBCWrite()).append("(paramIndex++,").append(this.local).append(");")
 		    .append("}");
 	}
 

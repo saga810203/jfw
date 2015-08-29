@@ -2,23 +2,23 @@ package org.jfw.core.code.generator.impl;
 
 import org.jfw.core.code.generator.ResultSetGetHandler;
 /**
- * ´¦Àí¼òµ¥µÄÊý¾Ý£¬²»ÐèÊý¾Ý×ª»»£¬BLOB£¬CLOB,µÄ´¦Àí±ðÐÐ´¦Àí
+ * ï¿½ï¿½ï¿½ï¿½òµ¥µï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½BLOBï¿½ï¿½CLOB,ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½
  * @author pengjia
  *
  */
 public abstract class AbstractGetHandler implements ResultSetGetHandler {
-	private String el4Read;
-	private String el4Write;
-	private String el4WasNull;
-	private boolean nullable;
-	private Class<?> javaType;
+	protected String el4Read;
+	protected String el4Write;
+	protected String el4WasNull;
+	protected boolean nullable;
+	protected Class<?> javaType;
 	
 	
 	
 	protected abstract String getMethodName4JDBCRead();
 
 	/**
-	 * ÔÚ´¦ÀíBLOB,CLOBµÈÊý¾ÝÀàÐÍÊ±ÐèÒª´¦Àí×ÊÔ´ÊÍ·Å
+	 * ï¿½Ú´ï¿½ï¿½ï¿½BLOB,CLOBï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½Í·ï¿½
 	 * @return
 	 */
 	//protected abstract boolean needReaplaceResource();

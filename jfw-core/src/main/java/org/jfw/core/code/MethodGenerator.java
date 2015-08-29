@@ -25,7 +25,8 @@ public abstract class MethodGenerator {
 			{
 				Class<?> cl = (Class<?>)type;
 				if(cl.isArray()){
-					sb.append(cl.getComponentType().getName()).append("[]");
+				    writeNameOfType(cl.getComponentType(),sb);
+					sb.append("[]");
 				}else {
 					sb.append(cl.getName());
 				}
@@ -57,13 +58,14 @@ public abstract class MethodGenerator {
 				}				
 			}else   if (type instanceof WildcardType)
 			{
+			    boolean doSuppers =true;
 				WildcardType wt =(WildcardType)type;
-				sb.append("?  ");
-				if(wt.getUpperBounds().length>0){
-					sb.append("extends ");
-					writeNameOfType(wt.getUpperBounds()[0], sb);
-				}else {
-					sb.append("suppers ");
+				sb.append("?");
+				if(wt.getLowerBounds().length>0){
+					sb.append(" super ");
+					writeNameOfType(wt.getLowerBounds()[0], sb);
+				}else if (Object.class != wt.getUpperBounds()[0]) {
+					sb.append(" extends ");
 					writeNameOfType(wt.getUpperBounds()[0], sb);
 				}
 				
