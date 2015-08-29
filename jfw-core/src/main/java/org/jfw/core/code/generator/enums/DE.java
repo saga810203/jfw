@@ -2,6 +2,18 @@ package org.jfw.core.code.generator.enums;
 
 import org.jfw.core.code.generator.PreparedStatementSetHandler;
 import org.jfw.core.code.generator.ResultSetGetHandler;
+import org.jfw.core.code.generator.impl.ByteGet;
+import org.jfw.core.code.generator.impl.ByteSet;
+import org.jfw.core.code.generator.impl.DoubleGet;
+import org.jfw.core.code.generator.impl.DoubleSet;
+import org.jfw.core.code.generator.impl.FloatGet;
+import org.jfw.core.code.generator.impl.FloatSet;
+import org.jfw.core.code.generator.impl.IntGet;
+import org.jfw.core.code.generator.impl.IntSet;
+import org.jfw.core.code.generator.impl.LongGet;
+import org.jfw.core.code.generator.impl.LongSet;
+import org.jfw.core.code.generator.impl.ShortGet;
+import org.jfw.core.code.generator.impl.ShortSet;
 import org.jfw.core.code.generator.impl.StringGet;
 import org.jfw.core.code.generator.impl.StringSet;
 
@@ -13,8 +25,21 @@ import org.jfw.core.code.generator.impl.StringSet;
  */
 public enum DE {
 
-	STRING_VARCHAR("DA0001", "CHAR", 255, -1,true,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
-	NN_STRING_VARCHAR("DA0002", "CHAR", 255, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class);
+    Byte("DA0005", "INTEGER", -1, -1,false,true,true,true,null,true,null,ByteGet.class,ByteSet.class,byte.class),
+    BYTE("DA0006", "INTEGER", -1, -1,true,true,true,true,null,true,null,ByteGet.class,ByteSet.class,Byte.class),
+    Short("DA0003", "SMALLINT", -1, -1,false,true,true,true,null,true,null,ShortGet.class,ShortSet.class,short.class),
+    SHORT("DA0004", "SMALLINT", -1, -1,true,true,true,true,null,true,null,ShortGet.class,ShortSet.class,Short.class),
+	integer("DA0003", "INTEGER", -1, -1,false,true,true,true,null,true,null,IntGet.class,IntSet.class,int.class),
+	INTEGER("DA0004", "INTEGER", -1, -1,true,true,true,true,null,true,null,IntGet.class,IntSet.class,Integer.class),
+	Long("DA0003", "BIGINT", -1, -1,false,true,true,true,null,true,null,LongGet.class,LongSet.class,long.class),
+	LONG("DA0004", "BIGINT", -1, -1,true,true,true,true,null,true,null,LongGet.class,LongSet.class,Long.class),
+	Float("DA0003", "FLOAT", -1, -1,false,true,true,true,null,true,null,FloatGet.class,FloatSet.class,float.class),
+    FLOAT("DA0004", "FLOAT", -1, -1,true,true,true,true,null,true,null,FloatGet.class,FloatSet.class,Float.class),
+    Double("DA0003", "DOUBLE", -1, -1,false,true,true,true,null,true,null,DoubleGet.class,DoubleSet.class,double.class),
+    DOUBLE("DA0004", "DOUBLE", -1, -1,true,true,true,true,null,true,null,DoubleGet.class,DoubleSet.class,Double.class),    
+
+    STRING("DA0001", "CHAR", 255, -1,true,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
+    string("DA0002", "CHAR", 255, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class);
 //	int_INTEGER
 
 	private DE(String id, String typeForDataBase, int length, int secondlength,
@@ -40,7 +65,7 @@ public enum DE {
 	}
 	private String id;
 	/**
-	 * ÓÃÓÚÊý¾Ý¿â½¨±íµÄ×Ö¶ÎÃèÊö£¬ if (length <0 && secondlength <0){ create table XXXXXX
+	 * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿â½¨ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ if (length <0 && secondlength <0){ create table XXXXXX
 	 * columnName typeForDataBase; } if ( secondlength <0){ create table XXXXXX
 	 * columnName typeForDataBase(length); }else{ create table XXXXXX columnName
 	 * typeForDataBase(length,secondLength); }
@@ -49,23 +74,23 @@ public enum DE {
 	private int length;
 	private int secondlength;
 	/**
-	 * ÊÇ·ñÔÊÐíÎª¿Õ
+	 * ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½
 	 */
 	private boolean nullable;
 	/**
-	 * ÊÇ·ñ¿ÉÒÔÓÃÔÚWhere Óï¾äÖÐ
+	 * ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Where ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	private boolean canFilter;
 	/**
-	 * ÊÇ·ñÔÚÄ¬ÈÏµÄSelectÓï¾äÖÐ´æÔÚ
+	 * ï¿½Ç·ï¿½ï¿½ï¿½Ä¬ï¿½Ïµï¿½Selectï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½
 	 */
 	private boolean inSelect;
 	/**
-	 * ÊÇ´æÔÚInsertÓï¾äÖÐ
+	 * ï¿½Ç´ï¿½ï¿½ï¿½Insertï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	private boolean inInsert;
 	/**
-	 * ÔÚinsertÓï¾äÖÐsqlµÄÄ¬ÈÏÖµ
+	 * ï¿½ï¿½insertï¿½ï¿½ï¿½ï¿½ï¿½sqlï¿½ï¿½Ä¬ï¿½ï¿½Öµ
 	 */
 	private String defaultSqlValueForInsert;
 	private boolean inUpdate;
