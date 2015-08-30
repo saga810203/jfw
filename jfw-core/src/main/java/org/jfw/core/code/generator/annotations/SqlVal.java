@@ -10,21 +10,22 @@ import org.jfw.core.code.generator.enums.DE;
 @Target(ElementType.METHOD)
 public @interface SqlVal {
 	/**
-	 * ¸³ÖµÊ±Ê¹ÓÃ£¬Ö¸¶¨²ÎÊı¾İÃû³Æ  ²ÎÊı°´Ë³ĞòÎª con,param1,param2,param3,param4,param4..........
+	 * èµ‹å€¼æ—¶ä½¿ç”¨ï¼ŒæŒ‡å®šå‚æ•°æ®åç§°  å‚æ•°æŒ‰é¡ºåºä¸º con,param1,param2,param3,param4,param4..........
 	 * @return
 	 */
-	String beanName() default "param1";
+	int paramIndex() default 1;
+
 	/**
-	 * ÓëbeanNameÒ»ÆğÓÃÉú³ÉÈ¡sql²ÎÊıÖµµÄ·½Ê½¡£Ä¬ÈÏÖµ Ö»È¡beanName×÷Îª²ÎÊı;
-	 * ÒÔµã¿ªÊ¼<Èç£º.getId()>Ö±½ÓºÏ³É;
-	 * ÆäËüÉú³ÉJavaBeanµÄgetter; Èç£ºid ==> .getId()
+	 * ä¸paramIndexä¸€èµ·ç”¨ç”Ÿæˆå–sqlå‚æ•°å€¼çš„æ–¹å¼ã€‚é»˜è®¤å€¼ åªå–param+paramIndexä½œä¸ºå‚æ•°;
+	 * ä»¥ç‚¹å¼€å§‹<å¦‚ï¼š.getId()>ç›´æ¥åˆæˆ;
+	 * å…¶å®ƒç”ŸæˆJavaBeançš„getter; å¦‚ï¼šid ==> .getId()
 	 * @return
 	 */
 	String field() default "";
 	
 	/**
-	 * sql±í´ïÊ½£¬Èç£º  a.ID >?      name=?   µÈ
-	 * ÔÚ¶¯Ì¬Éú³É¶¯Ì¬WhereÊ±ÓÃ
+	 * sqlè¡¨è¾¾å¼ï¼Œå¦‚ï¼š  a.ID >?      name=?   ç­‰
+	 * åœ¨åŠ¨æ€ç”ŸæˆåŠ¨æ€Whereæ—¶ç”¨
 	 */
 	String sqlEl() default "";
 	

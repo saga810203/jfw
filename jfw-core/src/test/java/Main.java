@@ -24,10 +24,11 @@ public class Main {
 		for(Method m: Main.class.getMethods()){
 			if (m.getName().equals("test"))
 			{
-				Type t = m.getGenericParameterTypes()[0];
+				Type t = m.getGenericReturnType();
 				StringBuilder sb = new StringBuilder();
 			MethodGenerator.writeNameOfType(t, sb);
 			System.out.println(sb.toString());
+
 			}
 		}
 

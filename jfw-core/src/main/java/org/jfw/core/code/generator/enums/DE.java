@@ -2,6 +2,10 @@ package org.jfw.core.code.generator.enums;
 
 import org.jfw.core.code.generator.PreparedStatementSetHandler;
 import org.jfw.core.code.generator.ResultSetGetHandler;
+import org.jfw.core.code.generator.impl.BigDecimalGet;
+import org.jfw.core.code.generator.impl.BigDecimalSet;
+import org.jfw.core.code.generator.impl.BooleanGet;
+import org.jfw.core.code.generator.impl.BooleanSet;
 import org.jfw.core.code.generator.impl.ByteGet;
 import org.jfw.core.code.generator.impl.ByteSet;
 import org.jfw.core.code.generator.impl.DoubleGet;
@@ -37,6 +41,13 @@ public enum DE {
     FLOAT("DA0004", "FLOAT", -1, -1,true,true,true,true,null,true,null,FloatGet.class,FloatSet.class,Float.class),
     Double("DA0003", "DOUBLE", -1, -1,false,true,true,true,null,true,null,DoubleGet.class,DoubleSet.class,double.class),
     DOUBLE("DA0004", "DOUBLE", -1, -1,true,true,true,true,null,true,null,DoubleGet.class,DoubleSet.class,Double.class),    
+  
+    BigDecimal("DA0003", "REAL", -1, -1,false,true,true,true,null,true,null,BigDecimalGet.class,BigDecimalSet.class,java.math.BigDecimal.class),
+    BIGDECIMAL("DA0004", "REAL", -1, -1,true,true,true,true,null,true,null,BigDecimalGet.class,BigDecimalSet.class,java.math.BigDecimal.class),   
+    
+    BOOL("DA0001", "CHAR", 1, -1,true,true,true,true,null,true,null,BooleanGet.class,BooleanSet.class,boolean.class),
+    Bool("DA0002", "CHAR", 1, -1,false,true,true,true,null,true,null,BooleanGet.class,BooleanSet.class,Boolean.class),
+    
 
     STRING("DA0001", "CHAR", 255, -1,true,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
     string("DA0002", "CHAR", 255, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class);
@@ -65,7 +76,7 @@ public enum DE {
 	}
 	private String id;
 	/**
-	 * ������ݿ⽨����ֶ������� if (length <0 && secondlength <0){ create table XXXXXX
+	 * 用于数据库建表的字段描述， if (length <0 && secondlength <0){ create table XXXXXX
 	 * columnName typeForDataBase; } if ( secondlength <0){ create table XXXXXX
 	 * columnName typeForDataBase(length); }else{ create table XXXXXX columnName
 	 * typeForDataBase(length,secondLength); }
@@ -74,23 +85,23 @@ public enum DE {
 	private int length;
 	private int secondlength;
 	/**
-	 * �Ƿ�����Ϊ��
+	 * 是否允许为空
 	 */
 	private boolean nullable;
 	/**
-	 * �Ƿ��������Where �����
+	 * 是否可以用在Where 语句中
 	 */
 	private boolean canFilter;
 	/**
-	 * �Ƿ���Ĭ�ϵ�Select����д���
+	 * 是否在默认的Select语句中存在
 	 */
 	private boolean inSelect;
 	/**
-	 * �Ǵ���Insert�����
+	 * 是存在Insert语句中
 	 */
 	private boolean inInsert;
 	/**
-	 * ��insert�����sql��Ĭ��ֵ
+	 * 在insert语句中sql的默认值
 	 */
 	private String defaultSqlValueForInsert;
 	private boolean inUpdate;

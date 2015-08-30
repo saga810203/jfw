@@ -1,23 +1,30 @@
 package org.jfw.core.code;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
+import org.jfw.core.code.generator.annotations.Final;
 import org.jfw.core.code.generator.impl.Utils;
 
 public abstract class MethodGenerator {
 	protected Class<?> parentType;
 	protected Method method;
+	protected Annotation[] annotations;
 	
 	public void init(Class<?> parentType,Method method)
 	{
 		this.method = method;
 		this.parentType = parentType;
+		this.annotations = method.getAnnotations();
 	}
+	public abstract void aferInit();
+	
 	
 	public static void writeNameOfType(Type type,StringBuilder sb)
 	{
@@ -76,16 +83,62 @@ public abstract class MethodGenerator {
 	{
 		StringBuilder sb = new StringBuilder();
 		Utils.resetLocalVarName();
-		
-		
-		
-		
+	    int modifiers = this.method.getModifiers();
+//        Modifier.PUBLIC         | Modifier.PROTECTED    | Modifier.PRIVATE |
+//        Modifier.ABSTRACT       | Modifier.STATIC       | Modifier.FINAL   |
+//        Modifier.SYNCHRONIZED   | Modifier.NATIVE       | Modifier.STRICT;
+	    //if (Modifier.isSynchronized(modifiers)) sb.append("synchronized ");
+	    if(null != this.method.getAnnotation(Final.class)) sb.append("final ");
+	    if (Modifier.isPublic(modifiers)) sb.append("public ");
+	    if (Modifier.isProtected(modifiers)) sb.append("protected ");
+	    //if (Modifier.isStatic(modifiers)) sb.append("static ");
+	    writeNameOfType(this.method.getGenericReturnType(), sb);
+	    sb.append(" ").append(this.method.getName()).append("(");
+	    this.buildParameters(sb);
+	    sb.append(") ");
+	    this.buildThrows(sb);
+	    sb.append("{");
+	    this.buildContent(sb);
+	    sb.append("}");
 		return sb.toString();
 	}
-	
-	
-	public static void main(String[] aa)
+	private void buildParameters(StringBuilder sb){
+	    int index=1;
+	    Type[] ts = this.method.getGenericParameterTypes();
+	    for(int i = 0 ; i < ts.length ; ++i)
+	    {
+	        if (i!= 0 ) sb.append(",");
+	        writeNameOfType(ts[i], sb);
+	        sb.append(" ");
+	        if (java.sql.Connection.class==ts[i]){
+	            if(i!=0 ) throw new IllegalArgumentException("java.sql.Connection must at index 0 in method");
+	            sb.append("con");
+	        }else{
+	            sb.append("param").append(index++);
+	        }
+	    }
+	}
+	private void buildThrows(StringBuilder sb)
 	{
-		
+	    Type[] ts = this.method.getGenericExceptionTypes();
+	    if(ts.length>0){
+	        sb.append(" throws ");
+	        for(int i = 0 ; i < ts.length ;++i)
+	        {
+	            if(i != 0 )sb.append(",");
+	            writeNameOfType(ts[i], sb);
+	        }
+	    }
+	    
+	}
+	protected void buildContent(StringBuilder sb){
+	    this.buildContentHead(sb);
+	    this.buildContentBody(sb);
+	    this.buildContentFoot(sb);
+	}
+	protected abstract void buildContentBody(StringBuilder sb);
+	protected void buildContentHead(StringBuilder sb){	    
+	}
+	protected void buildContentFoot(StringBuilder sb){	        
 	}
 }
