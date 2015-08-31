@@ -46,7 +46,7 @@ public abstract class AbstractGetHandler implements ResultSetGetHandler {
 			     .append("}else{")
 	                .append(this.el4Write).append("(").append(local).append(");}");
 			}else{
-			    sb.append(local).append("=null;");
+			    sb.append(local).append("=null;}");
 			}				
 		} else {	
 		    if(null!=this.el4Write){

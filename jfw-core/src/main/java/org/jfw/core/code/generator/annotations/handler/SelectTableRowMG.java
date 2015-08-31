@@ -45,6 +45,9 @@ public class SelectTableRowMG extends SelectTableMG {
         {
         	if(0!=i)sb.append(",");
         	sb.append(this.fields[i].getDbFieldName());
+            if(this.fields[i].getDbFieldAlias().length()>0){
+                sb.append(" ").append(this.fields[i].getDbFieldAlias());
+            }
         }
         sb.append(" FROM ").append(this.tableName);
 	}

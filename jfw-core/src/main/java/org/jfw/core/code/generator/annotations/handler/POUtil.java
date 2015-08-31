@@ -110,7 +110,15 @@ public abstract class POUtil {
         Class<?> tableClass = getViewClass(clazz);
         if(null == tableClass) new IllegalArgumentException("not found view with class:"+clazz.getName());
         List<Field> list = new LinkedList<Field>();
-        appendDBField(tableClass, list);
+        Field[] fs = clazz.getDeclaredFields();
+        for(Field f:fs)
+        {
+            if(Modifier.isStatic(f.getModifiers())) continue;
+            if(Modifier.isFinal(f.getModifiers())) continue;
+            
+            DBField df = f.getAnnotation(DBField.class);
+            if(null!=df && (df.xorInSelect()?!df.value().isInSelect():df.value().isInSelect())) list.add(f);            
+        }
         List<SelectField> result = new LinkedList<SelectField>();
         for(Field f:list)
         {

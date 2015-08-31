@@ -1,6 +1,5 @@
 package org.jfw.core.code.generator;
 
-import org.jfw.core.code.generator.annotations.SqlVal;
 import org.jfw.core.code.generator.annotations.handler.SelectField;
 
 public abstract class SelectMethodGenerator extends JDBCMethodGenerator {

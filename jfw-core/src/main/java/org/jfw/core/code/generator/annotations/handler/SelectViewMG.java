@@ -2,13 +2,9 @@ package org.jfw.core.code.generator.annotations.handler;
 
 import java.util.List;
 
-
-
-
 import org.jfw.core.code.generator.SelectMethodGenerator;
 import org.jfw.core.code.generator.annotations.SelectTable;
 import org.jfw.core.code.generator.annotations.SelectView;
-import org.jfw.core.code.generator.annotations.Table;
 import org.jfw.core.code.generator.annotations.View;
 
 public class SelectViewMG extends SelectMethodGenerator {
@@ -42,8 +38,23 @@ public class SelectViewMG extends SelectMethodGenerator {
         this.classname4ReturnType = returnType.getName();
 
         List<SelectField> list =  POUtil.getSelectFieldsInView(this.viewClass);        
-        if (list.isEmpty()) throw new RuntimeException("not found Query Field with @DBField in Class:"+this.tableClass.getName());
-        this.fields = list.toArray(new SelectField[list.size()]);
+        
+        if (list.isEmpty()) throw new RuntimeException("not found Query Field with @DBField in Class:"+this.viewClass.getName());
+       
+        if(Object.class!=view.inherited().value())
+        {
+            List<SelectField> list2=POUtil.getSelectFieldsInTable(view.inherited().value());
+            String taAlias= view.inherited().tableAlias().trim();
+            if(taAlias.length()>0)
+            {
+                for(SelectField sff:list2)
+                {
+                    sff.setDbFieldName(taAlias+"."+sff.getDbFieldName());
+                }
+                list.addAll(0,list2);
+            }
+        }
+        this.fields = list.toArray(new SelectField[list.size()]); 
         
         StringBuilder sb =new StringBuilder();
         sb.append("SELECT ");
@@ -51,8 +62,13 @@ public class SelectViewMG extends SelectMethodGenerator {
         {
         	if(0!=i)sb.append(",");
         	sb.append(this.fields[i].getDbFieldName());
+        	if(this.fields[i].getDbFieldAlias().length()>0){
+        	    sb.append(" ").append(this.fields[i].getDbFieldAlias());
+        	}
         }
-        sb.append(" FROM ").append(this.tableName);
+        
+        
+        sb.append(" FROM ").append(this.viewName);
 	}
 
 	@Override
