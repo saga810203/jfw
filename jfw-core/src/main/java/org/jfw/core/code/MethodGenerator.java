@@ -22,6 +22,7 @@ public abstract class MethodGenerator {
 		this.method = method;
 		this.parentType = parentType;
 		this.annotations = method.getAnnotations();
+		this.aferInit();
 	}
 	public abstract void aferInit();
 	

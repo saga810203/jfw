@@ -1,25 +1,25 @@
 package org.jfw.core.code.generator;
 
 public interface PreparedStatementSetHandler {
-	void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType);
+void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType);
 	
-	//ÔÚ¸³ÖµÖ®Ç°µ÷ÓÃ£ºÈçÉú³ÉBLOB,
+	//åœ¨èµ‹å€¼ä¹‹å‰è°ƒç”¨ï¼šå¦‚ç”ŸæˆBLOB,
 	void codeBeforWriteValue(StringBuilder sb);
 	/**
-	 * Ö»ÔÚinsert,update set a=? ÖĞÊ¹ÓÃ
+	 * åªåœ¨insert,update set a=? ä¸­ä½¿ç”¨
 	 * @return
 	 */
 	void wirteValue(StringBuilder sb);
 	/*
-	 * ÔÚwhere ÖĞ 
+	 * åœ¨where ä¸­ 
 	 */
 	void wirteNotNullValue(StringBuilder sb);
 	/*
-	 *ÔÚ¿ÉÄÜ²»ÓÃ¸³ÖµµÄµØ·½Ê¹ÓÃ 
-	 *Èç¶¯Ì¬Éú³ÉSQLµÄ¸³ÖµÊ±ÓÃ
+	 *åœ¨å¯èƒ½ä¸ç”¨èµ‹å€¼çš„åœ°æ–¹ä½¿ç”¨ 
+	 *å¦‚åŠ¨æ€ç”ŸæˆSQLçš„èµ‹å€¼æ—¶ç”¨
 	 */
 	void wirteValueWithCheck(StringBuilder sb);
-	//ÔÚ¸³ÖµÖ®ºóµ÷ÓÃ:ÊÍ·ÅBLOB
+	//åœ¨èµ‹å€¼ä¹‹åè°ƒç”¨:é‡Šæ”¾BLOB
 	void codeAfterWriteValue(StringBuilder sb);
 	
 	
