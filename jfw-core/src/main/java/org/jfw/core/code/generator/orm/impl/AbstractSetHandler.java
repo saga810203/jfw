@@ -7,7 +7,14 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 	protected Class<?> javaType;
 	protected String local = null;
 	
-	protected  abstract String getMethodName4JDBCWrite();
+	@Override
+    public boolean isReplaceResource() {
+        return false;
+    }
+    @Override
+    public void replaceResource(StringBuilder sb) {
+    }
+    protected  abstract String getMethodName4JDBCWrite();
 	protected  abstract int getJdbcType();
 	
 	
@@ -27,13 +34,6 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 			local=Utils.getLocalVarName();
 			sb.append(this.javaType.getName()).append(" ").append(this.local).append("=").append(this.el4Read).append(";");
 		}
-	}
-	public void codeBeforWriteValue(StringBuilder sb) {
-//		if (this.getClass4Value().isPrimitive()) return "";
-//		StringBuilder sb = new StringBuilder();
-//		this.checkLocal(sb);
-//		return sb.toString();
-//		return "";
 	}
 
 	public void wirteValue(StringBuilder sb) {
@@ -62,8 +62,7 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 		    .append("}");
 	}
 
-	public void codeAfterWriteValue(StringBuilder sb) {
-	}
+
 
 	public void codeBeginCheckInSetOrWhere(StringBuilder sb) {
 		this.checkLocal(sb);

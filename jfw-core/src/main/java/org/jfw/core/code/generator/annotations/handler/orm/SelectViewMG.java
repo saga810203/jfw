@@ -6,7 +6,7 @@ import org.jfw.core.code.generator.annotations.orm.SelectTable;
 import org.jfw.core.code.generator.annotations.orm.SelectView;
 import org.jfw.core.code.generator.annotations.orm.View;
 import org.jfw.core.code.generator.orm.SelectMethodGenerator;
-
+//FIXME:视图表中存在计算字段的存在问题
 public class SelectViewMG extends SelectMethodGenerator {
 	protected Class<?> viewClass;
 	protected String viewName ;

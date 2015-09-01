@@ -3,8 +3,8 @@ package org.jfw.core.code.generator.orm;
 public interface PreparedStatementSetHandler {
 void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType);
 	
-	//在赋值之前调用：如生成BLOB,
-	void codeBeforWriteValue(StringBuilder sb);
+	//赋后是否需要释放资源：如BLOB,
+    boolean isReplaceResource();
 	/**
 	 * 只在insert,update set a=? 中使用
 	 * @return
@@ -20,9 +20,7 @@ void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType
 	 */
 	void wirteValueWithCheck(StringBuilder sb);
 	//在赋值之后调用:释放BLOB
-	void codeAfterWriteValue(StringBuilder sb);
-	
-	
+	void replaceResource(StringBuilder sb);
 	void codeBeginCheckInSetOrWhere(StringBuilder sb);
 	void codeELESCheckInSetOrWhere(StringBuilder sb);
 	void codeEndCheckInSetOrWhere(StringBuilder sb);

@@ -106,7 +106,12 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
 
 	@Override
 	protected void buildHandleResult(StringBuilder sb) {
-		sb.append("java.sql.ResultSet rs = ps.executeQuery();try{");
+		sb.append("java.sql.ResultSet rs = ps.executeQuery();");
+		for(int i = 0 ; i < this.psshs.length ; ++i)
+		{
+		    if(this.psshs[i].isReplaceResource()) this.psshs[i].replaceResource(sb);
+		}
+		sb.append("try{");
 		if (!this.singleRow) {
 			sb.append("java.util.List<").append(this.classname4ReturnType)
 					.append("> result = new java.util.LinkedList<")

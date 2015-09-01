@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+import org.jfw.core.code.generator.annotations.orm.SqlVal;
 import org.jfw.core.code.orm.MethodGenerator;
 
 
@@ -21,16 +22,17 @@ public class Main {
 
     public static void main(String[] args) {
 	//	System.out.println(String[].class.getName());
-		for(Method m: Main.class.getMethods()){
-			if (m.getName().equals("test"))
-			{
-				Type t = m.getGenericReturnType();
-				StringBuilder sb = new StringBuilder();
-			MethodGenerator.writeNameOfType(t, sb);
-			System.out.println(sb.toString());
-
-			}
-		}
+//		for(Method m: Main.class.getMethods()){
+//			if (m.getName().equals("test"))
+//			{
+//				Type t = m.getGenericReturnType();
+//				StringBuilder sb = new StringBuilder();
+//			MethodGenerator.writeNameOfType(t, sb);
+//			System.out.println(sb.toString());
+//
+//			}
+//		}
+        //SqlVal sv = new SqlVal();
 
 	}
 	
