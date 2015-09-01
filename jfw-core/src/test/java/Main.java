@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-import org.jfw.core.code.MethodGenerator;
+import org.jfw.core.code.orm.MethodGenerator;
 
 
 public class Main {
