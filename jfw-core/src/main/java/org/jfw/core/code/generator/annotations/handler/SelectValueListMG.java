@@ -4,21 +4,30 @@ import java.util.List;
 
 import org.jfw.core.code.generator.SelectMethodGenerator;
 import org.jfw.core.code.generator.annotations.SelectTable;
+import org.jfw.core.code.generator.annotations.SelectValueList;
 import org.jfw.core.code.generator.annotations.Table;
+import org.jfw.core.code.generator.enums.DE;
 
 public class SelectValueListMG  extends SelectMethodGenerator{
-    protected Class<?> tableClass;
-    protected String tableName ;
-    protected Table table;
-    
+    protected DE dataEle;
     
     protected void resolveReturnTypeAndSql()
     {
-        SelectTable st = this.method.getAnnotation(SelectTable.class);
-        if(null== st) throw new RuntimeException("class SelectTableMG only handle method with annotation @SelectTable");
-        this.tableClass = st.beanClass();
+        SelectValueList st = this.method.getAnnotation(SelectValueList.class);
+        if(null== st) throw new RuntimeException("class SelectValueListMG only handle method with annotation @SelectValueList");
+        this.dataEle =st.resultType();
         Class<?> returnType = POUtil.getReturnType4SelectList(this.method);
-        if(null== returnType) throw new RuntimeException("invalid returnType with annotation @SelectTable at "+this.parentType.getName()+"."+this.method.getName());
+        if(null== returnType) throw new RuntimeException("invalid returnType with annotation @SelectValueList at "+this.parentType.getName()+"."+this.method.getName());
+       if(Object.class==returnType){
+    	   returnType = this.dataEle.getFieldClass();
+       }
+       if(returnType!=this.dataEle.getFieldClass()){
+    	   if()
+       }
+        
+        
+        
+        
         if(this.tableClass == Object.class){
             this.tableClass = returnType;
         }else{

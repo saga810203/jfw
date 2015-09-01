@@ -12,7 +12,6 @@ public class SelectViewMG extends SelectMethodGenerator {
 	protected String viewName ;
 	protected View view;
 	
-	
 	protected void resolveReturnTypeAndSql()
 	{
 		SelectView st = this.method.getAnnotation(SelectView.class);
@@ -66,8 +65,6 @@ public class SelectViewMG extends SelectMethodGenerator {
         	    sb.append(" ").append(this.fields[i].getDbFieldAlias());
         	}
         }
-        
-        
         sb.append(" FROM ").append(this.viewName);
 	}
 
