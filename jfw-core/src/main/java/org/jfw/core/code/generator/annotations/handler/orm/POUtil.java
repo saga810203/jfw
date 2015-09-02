@@ -188,6 +188,46 @@ public abstract class POUtil {
 	    
 	    return null;
 	}
+    public static void appendInsertDBField(Class<?> clazz,List<Field> list)
+    {
+        if(clazz.isInterface() || (Object.class==clazz) ) return;
+        appendDBField(clazz.getSuperclass(), list);
+        Field[] fs = clazz.getDeclaredFields();
+        for(Field f:fs)
+        {
+            if(Modifier.isStatic(f.getModifiers())) continue;
+            if(Modifier.isFinal(f.getModifiers())) continue;
+            
+            DBField df = f.getAnnotation(DBField.class);
+            if(null!=df && (!df.calcField())) list.add(f);            
+        }
+    }
+    
+    public static List<Field> getInsertFieldInTable(Class<?> clazz){
+    	List<Field> list = new LinkedList<Field>();
+    	Class<?> tCls = getTableClass(clazz);
+    	if(tCls==null) throw new RuntimeException("not found @Table at Class or supperClass :"+clazz.getName());
+    	appendInsertDBField(tCls,list);
+    	return list;
+    }
+    public static void appendUpdateDBField(Class<?> clazz,List<Field> list)
+    {
+        if(clazz.isInterface() || (Object.class==clazz) ) return;
+        appendDBField(clazz.getSuperclass(), list);
+        Field[] fs = clazz.getDeclaredFields();
+        for(Field f:fs)
+        {
+            if(Modifier.isStatic(f.getModifiers())) continue;
+            if(Modifier.isFinal(f.getModifiers())) continue;
+            
+            DBField df = f.getAnnotation(DBField.class);
+            if(null!=df && (df.xorInUpdate()?!df.value().isInUpdate():df.value().isInUpdate())) list.add(f);            
+        }
+    }
+    
+    
+	
+	
 	
 	static{
 	    wrapClass.put(int.class,Integer.class);

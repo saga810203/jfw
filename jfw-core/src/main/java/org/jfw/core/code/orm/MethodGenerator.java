@@ -103,22 +103,8 @@ public abstract class MethodGenerator {
 	    sb.append("}");
 		return sb.toString();
 	}
-	private void buildParameters(StringBuilder sb){
-	    int index=1;
-	    Type[] ts = this.method.getGenericParameterTypes();
-	    for(int i = 0 ; i < ts.length ; ++i)
-	    {
-	        if (i!= 0 ) sb.append(",");
-	        writeNameOfType(ts[i], sb);
-	        sb.append(" ");
-	        if (java.sql.Connection.class==ts[i]){
-	            if(i!=0 ) throw new IllegalArgumentException("java.sql.Connection must at index 0 in method");
-	            sb.append("con");
-	        }else{
-	            sb.append("param").append(index++);
-	        }
-	    }
-	}
+	protected abstract void buildParameters(StringBuilder sb) ;
+	 
 	private void buildThrows(StringBuilder sb)
 	{
 	    Type[] ts = this.method.getGenericExceptionTypes();

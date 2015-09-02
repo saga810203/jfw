@@ -6,7 +6,7 @@ public abstract class UpdateMethodGenerator extends JDBCMethodGenerator {
 		if(int.class!=this.method.getGenericReturnType())throw new RuntimeException("invalid returnType with DB DML operation at "+this.parentType.getName()+"."+this.method.getName());
 	}
 	
-
+    
 
 
 	@Override
