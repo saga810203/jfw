@@ -1,29 +1,21 @@
 package org.jfw.core.code.generator.orm;
 
-public class UpdateMethodGenerator extends JDBCMethodGenerator{
+public abstract class UpdateMethodGenerator extends JDBCMethodGenerator {
+	protected void checkReturnType()
+	{
+		if(int.class!=this.method.getGenericReturnType())throw new RuntimeException("invalid returnType with DB DML operation at "+this.parentType.getName()+"."+this.method.getName());
+	}
+	
 
-    @Override
-    protected void buildQuerySQL(StringBuilder sb) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    @Override
-    protected void buildQueryParamter(StringBuilder sb) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    @Override
-    protected void buildHandleResult(StringBuilder sb) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void aferInit() {
-        // TODO Auto-generated method stub
-        
-    }
-
+	@Override
+	protected void buildHandleResult(StringBuilder sb) {
+		sb.append("int result = ps.executeUpdate();");
+		for(int i = 0 ; i < this.psshs.length ; ++i)
+		{
+			if(this.psshs[i].isReplaceResource()) this.psshs[i].replaceResource(sb);
+		}
+		sb.append("retrun result");
+	}
 }

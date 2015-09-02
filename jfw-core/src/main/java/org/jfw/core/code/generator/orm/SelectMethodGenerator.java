@@ -88,21 +88,7 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
 		sb.append("\";");
 	}
 
-	@Override
-	protected void buildQueryParamter(StringBuilder sb) {
-		if (this.psshs.length > 0) {
-			sb.append("int paramIndex = 1;");
-			if (this.dynamicSql) {
-				for (int i = 0; i < this.psshs.length; ++i) {
-					this.psshs[i].wirteValueWithCheck(sb);
-				}
-			} else {
-				for (int i = 0; i < this.psshs.length; ++i) {
-					this.psshs[i].wirteNotNullValue(sb);
-				}
-			}
-		}
-	}
+
 
 	@Override
 	protected void buildHandleResult(StringBuilder sb) {

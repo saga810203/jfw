@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InsertBean {
+public @interface InsertTable {
 	boolean dynamic() default false;	
 }
 

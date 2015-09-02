@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UpdateBean {
+public @interface UpdateTable {
 	boolean dynamic() default false;
 }
