@@ -24,8 +24,10 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 		if(el4ReadValue!=null && el4ReadValue.trim().length()>0)
 		{
 			this.el4Read = el4ReadValue.trim();
-		}else{
+		}else if(fieldName!=null&&(fieldName.trim().length()>0)){
 			this.el4Read = beanName.trim()+"."+Utils.getGetter(fieldName)+"()";
+		}else{
+		    this.el4Read=beanName.trim();
 		}
 		this.javaType = javaType;
 	}
@@ -51,11 +53,15 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 	}
 
 	public void wirteNotNullValue(StringBuilder sb) {
-		
-		 sb.append("ps."+this.getMethodName4JDBCWrite()+"(paramIndex++,"+this.el4Read+");");
+	    if(null==local){
+		    sb.append("ps."+this.getMethodName4JDBCWrite()+"(paramIndex++,"+this.el4Read+");");
+	    }else{
+	        sb.append("ps."+this.getMethodName4JDBCWrite()+"(paramIndex++,"+local+");");   
+	    }
 	}
 
 	public  void wirteValueWithCheck(StringBuilder sb) {
+	    if(this.javaType.isPrimitive()) throw new RuntimeException("don't call this method with primitive class");
 		this.checkLocal(sb);
 		sb.append("if(nul!=").append(this.local).append("){")
 		    .append("  ps.").append(this.getMethodName4JDBCWrite()).append("(paramIndex++,").append(this.local).append(");")
@@ -65,15 +71,18 @@ public abstract class AbstractSetHandler implements PreparedStatementSetHandler 
 
 
 	public void codeBeginCheckInSetOrWhere(StringBuilder sb) {
+	    if(this.javaType.isPrimitive()) throw new RuntimeException("don't call this method with primitive class");
 		this.checkLocal(sb);
 		sb.append("if(nul!=").append(this.local).append("){");
 	}
 
 	public void codeELESCheckInSetOrWhere(StringBuilder sb) {
+	    if(this.javaType.isPrimitive()) throw new RuntimeException("don't call this method with primitive class");
 		sb.append("}else{");
 	}
 
 	public void codeEndCheckInSetOrWhere(StringBuilder sb) {
+	    if(this.javaType.isPrimitive()) throw new RuntimeException("don't call this method with primitive class");
 		sb.append("}");
 	}
 

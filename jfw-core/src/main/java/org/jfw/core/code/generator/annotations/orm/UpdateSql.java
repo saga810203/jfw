@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UpdateSql {
 	String value();
-	SqlVal[] params() default {};
+	SqlVal[] sqlvalue() default {};
+	SqlVal[] where() default{};
 }

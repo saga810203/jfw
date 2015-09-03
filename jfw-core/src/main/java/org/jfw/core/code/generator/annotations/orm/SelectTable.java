@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jfw.core.code.generator.annotations.handler.orm.SelectTableMG;
+
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SelectTable {
@@ -18,4 +20,6 @@ public @interface SelectTable {
      */
     boolean and() default true;
     boolean dynamicFilter() default false;  
+    boolean bulidMehtod() default true;
+    Class<?> buildHandleClass() default SelectTableMG.class;
 }

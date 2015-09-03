@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jfw.core.code.generator.annotations.handler.orm.SelectValueMG;
 import org.jfw.core.code.generator.enums.orm.DE;
 
 @Target(ElementType.METHOD)
@@ -21,4 +22,6 @@ public @interface SelectValue {
 	 */
 	boolean and() default true;
 	boolean dynamicFilter() default false;	
+    boolean bulidMehtod() default true;
+    Class<?> buildHandleClass() default SelectValueMG.class;
 }

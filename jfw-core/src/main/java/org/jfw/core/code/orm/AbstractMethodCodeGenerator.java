@@ -9,17 +9,21 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 
+import org.jfw.core.code.MethodCodeGenerator;
 import org.jfw.core.code.generator.annotations.orm.Final;
 import org.jfw.core.code.generator.orm.impl.Utils;
 
-public abstract class MethodGenerator {
+public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator {
 	protected Class<?> parentType;
 	protected Method method;
 	protected Annotation[] annotations;
-	
+	@Override
 	public void init(Class<?> parentType,Method method)
 	{
 		this.method = method;
+		if(!Modifier.isAbstract(method.getModifiers())){
+		    throw new RuntimeException(parentType.getName()+"."+method.getName()+ " is not abstract  mehtod");
+		}
 		this.parentType = parentType;
 		this.annotations = method.getAnnotations();
 		this.aferInit();
@@ -56,7 +60,7 @@ public abstract class MethodGenerator {
 				sb.append(">");
 			}else  if (type instanceof TypeVariable)
 			{
-				TypeVariable tt =(TypeVariable)type;
+				TypeVariable<?> tt =(TypeVariable<?>)type;
 				sb.append(tt.getName()).append(" extends ");
 				Type[] ts = tt.getBounds();
 				for(int i = 0 ; i < ts.length ;++i)
@@ -66,7 +70,6 @@ public abstract class MethodGenerator {
 				}				
 			}else   if (type instanceof WildcardType)
 			{
-			    boolean doSuppers =true;
 				WildcardType wt =(WildcardType)type;
 				sb.append("?");
 				if(wt.getLowerBounds().length>0){
@@ -79,7 +82,7 @@ public abstract class MethodGenerator {
 				
 			}
 	}
-	
+	@Override
 	public String build()
 	{
 		StringBuilder sb = new StringBuilder();
@@ -88,7 +91,7 @@ public abstract class MethodGenerator {
 //        Modifier.PUBLIC         | Modifier.PROTECTED    | Modifier.PRIVATE |
 //        Modifier.ABSTRACT       | Modifier.STATIC       | Modifier.FINAL   |
 //        Modifier.SYNCHRONIZED   | Modifier.NATIVE       | Modifier.STRICT;
-	    //if (Modifier.isSynchronized(modifiers)) sb.append("synchronized ");
+	    if (Modifier.isSynchronized(modifiers)) sb.append("synchronized ");
 	    if(null != this.method.getAnnotation(Final.class)) sb.append("final ");
 	    if (Modifier.isPublic(modifiers)) sb.append("public ");
 	    if (Modifier.isProtected(modifiers)) sb.append("protected ");

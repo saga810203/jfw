@@ -1,13 +1,10 @@
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 
-import org.jfw.core.code.generator.annotations.orm.SqlVal;
-import org.jfw.core.code.orm.MethodGenerator;
-
-
+import org.jfw.core.code.MethodCodeGenerator;
+import org.jfw.core.code.generator.annotations.orm.SelectTable;
 public class Main {
     private Boolean ss;
     private boolean bb;
@@ -20,22 +17,48 @@ public class Main {
         this.bb = bb;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	//	System.out.println(String[].class.getName());
-//		for(Method m: Main.class.getMethods()){
-//			if (m.getName().equals("test"))
-//			{
+		for(Method m: Main.class.getMethods()){
+			if (m.getName().equals("test"))
+			{
 //				Type t = m.getGenericReturnType();
 //				StringBuilder sb = new StringBuilder();
 //			MethodGenerator.writeNameOfType(t, sb);
 //			System.out.println(sb.toString());
-//
-//			}
-//		}
-        //SqlVal sv = new SqlVal();
+			   Annotation[] ats=   m.getAnnotations();
+			   for(Annotation at:ats)
+			   {
+			       boolean bm = false;
+			       for(Method am:at.getClass().getMethods())
+			       {
+			           if(am.getName().equals("bulidMehtod")&&
+			              am.getReturnType()==boolean.class &&
+			              am.getParameterTypes().length==0 &&
+			              am.invoke(at, new Object[]{}).equals(Boolean.TRUE)){
+			              bm=true;
+			           }
+			       }
+			       if(bm){
+	                   for(Method am:at.getClass().getMethods())
+	                   {
+	                       if(am.getName().equals("buildHandleClass")&&
+	                          am.getReturnType()==Class.class &&
+	                          am.getParameterTypes().length==0 &&
+	                          MethodCodeGenerator.class.isAssignableFrom((Class<?>)  am.invoke(at, new Object[]{})  )){
+	                              System.out.println(am.invoke(at, new Object[]{}));
+	                       }
+	                   }  
+			       }
+			   }
+
+			}
+		}
+//        //SqlVal sv = new SqlVal();
+        System.out.println(Integer.class.isPrimitive());
 
 	}
-	
+	@SelectTable(bulidMehtod=true)
 	public static void test(List<?> aa)
 	{
 		

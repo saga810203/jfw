@@ -224,6 +224,13 @@ public abstract class POUtil {
             if(null!=df && (df.xorInUpdate()?!df.value().isInUpdate():df.value().isInUpdate())) list.add(f);            
         }
     }
+    public static List<Field> getUpdateFieldInTable(Class<?> clazz){
+        List<Field> list = new LinkedList<Field>();
+        Class<?> tCls = getTableClass(clazz);
+        if(tCls==null) throw new RuntimeException("not found @Table at Class or supperClass :"+clazz.getName());
+        appendUpdateDBField(tCls,list);
+        return list;
+    }
     
     
 	

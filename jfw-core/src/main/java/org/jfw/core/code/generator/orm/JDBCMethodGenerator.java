@@ -4,9 +4,9 @@ import java.lang.reflect.Type;
 
 import org.jfw.core.code.generator.annotations.orm.SqlVal;
 import org.jfw.core.code.generator.enums.orm.DE;
-import org.jfw.core.code.orm.MethodGenerator;
+import org.jfw.core.code.orm.AbstractMethodCodeGenerator;
 
-public abstract class JDBCMethodGenerator extends MethodGenerator {
+public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 	protected boolean dynamicSql = false;
 	protected SqlVal[] sqlVals = new SqlVal[0];
 	protected PreparedStatementSetHandler[] psshs = new PreparedStatementSetHandler[0];
@@ -49,7 +49,7 @@ public abstract class JDBCMethodGenerator extends MethodGenerator {
 	protected void buildContentBody(StringBuilder sb) {
 		buildPSSH();
 
-		this.buildQuerySQL(sb);
+		this.buildSQL(sb);
 
 		sb.append("java.sql.PreparedStatement ps = con.prepareStatement(sql");
 		if (this.dynamicSql) {
@@ -61,20 +61,7 @@ public abstract class JDBCMethodGenerator extends MethodGenerator {
 		this.buildHandleResult(sb);
 		sb.append("}finally{try{ps.close();}catch(SQLException e){}}");
 	}
-	protected void buildQueryParamter(StringBuilder sb) {
-		if (this.psshs.length > 0) {
-			sb.append("int paramIndex = 1;");
-			if (this.dynamicSql) {
-				for (int i = 0; i < this.psshs.length; ++i) {
-					this.psshs[i].wirteValueWithCheck(sb);
-				}
-			} else {
-				for (int i = 0; i < this.psshs.length; ++i) {
-					this.psshs[i].wirteNotNullValue(sb);
-				}
-			}
-		}
-	}
+	protected abstract void buildQueryParamter(StringBuilder sb) ;
 	protected void buildParameters(StringBuilder sb){
 	    int index=1;
 	    Type[] ts = this.method.getGenericParameterTypes();
@@ -92,7 +79,7 @@ public abstract class JDBCMethodGenerator extends MethodGenerator {
 	        }
 	    }
 	}
-	protected abstract void buildQuerySQL(StringBuilder sb);
+	protected abstract void buildSQL(StringBuilder sb);
 	protected abstract void buildHandleResult(StringBuilder sb);
 
 	public static class SqlValue {
