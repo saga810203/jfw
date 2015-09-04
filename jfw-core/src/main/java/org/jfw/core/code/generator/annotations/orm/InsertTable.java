@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jfw.core.code.MethodCodeGenerator;
 import org.jfw.core.code.generator.annotations.handler.orm.InsertTableMG;
 
 @Target(ElementType.METHOD)
@@ -12,6 +13,6 @@ import org.jfw.core.code.generator.annotations.handler.orm.InsertTableMG;
 public @interface InsertTable {
 	Class<?> value() default Object.class;
 	boolean bulidMehtod() default true;
-	Class<?> buildHandleClass() default InsertTableMG.class;
+	Class<? extends MethodCodeGenerator> buildHandleClass() default InsertTableMG.class;
 }
 

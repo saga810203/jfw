@@ -21,7 +21,7 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 	public void init(Class<?> parentType,Method method)
 	{
 		this.method = method;
-		if(!Modifier.isAbstract(method.getModifiers())){
+		if(!Modifier.isAbstract(method.getModifiers())&& !method.getDeclaringClass().isInterface()  ){
 		    throw new RuntimeException(parentType.getName()+"."+method.getName()+ " is not abstract  mehtod");
 		}
 		this.parentType = parentType;
@@ -93,8 +93,7 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 //        Modifier.SYNCHRONIZED   | Modifier.NATIVE       | Modifier.STRICT;
 	    if (Modifier.isSynchronized(modifiers)) sb.append("synchronized ");
 	    if(null != this.method.getAnnotation(Final.class)) sb.append("final ");
-	    if (Modifier.isPublic(modifiers)) sb.append("public ");
-	    if (Modifier.isProtected(modifiers)) sb.append("protected ");
+	   sb.append("public ");
 	    //if (Modifier.isStatic(modifiers)) sb.append("static ");
 	    writeNameOfType(this.method.getGenericReturnType(), sb);
 	    sb.append(" ").append(this.method.getName()).append("(");

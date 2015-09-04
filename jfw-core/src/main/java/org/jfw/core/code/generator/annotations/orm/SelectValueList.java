@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jfw.core.code.MethodCodeGenerator;
 import org.jfw.core.code.generator.annotations.handler.orm.SelectValueListMG;
 import org.jfw.core.code.generator.enums.orm.DE;
 
@@ -23,5 +24,5 @@ public @interface SelectValueList {
     boolean and() default true;
     boolean dynamicFilter() default false;  
     boolean bulidMehtod() default true;
-    Class<?> buildHandleClass() default SelectValueListMG.class;
+    Class<? extends MethodCodeGenerator> buildHandleClass() default SelectValueListMG.class;
 }

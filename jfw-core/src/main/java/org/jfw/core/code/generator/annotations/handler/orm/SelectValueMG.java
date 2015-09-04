@@ -1,6 +1,5 @@
 package org.jfw.core.code.generator.annotations.handler.orm;
 
-import org.jfw.core.code.generator.annotations.orm.SelectTable;
 import org.jfw.core.code.generator.annotations.orm.SelectValueList;
 
 public class SelectValueMG extends SelectValueListMG{
