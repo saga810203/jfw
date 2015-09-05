@@ -8,8 +8,16 @@ public class SelectTableRowMG extends SelectTableMG {
 
 	@Override
 	public void aferInit() {
-		super.aferInit();
-		this.singleRow = true;
+        this.singleRow = true;
+        this.needNew4ReturnType = true;
+        this.resolveReturnTypeAndSql();
+        this.filter = this.method.getAnnotation(SelectTableRow.class).filter();
+        this.filter = null== this.filter?"":this.filter.trim();
+        this.order = "";
+        this.sqlVals =  this.method.getAnnotation(SelectTableRow.class).sqlVal();
+        this.sortSqlVals();     
+        this.and =  this.method.getAnnotation(SelectTableRow.class).and();
+        this.dynamicFilter =  this.method.getAnnotation(SelectTableRow.class).dynamicFilter();
 	}
 	protected void resolveReturnTypeAndSql()
 	{

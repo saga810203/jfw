@@ -78,11 +78,15 @@ public class InsertTableMG extends UpdateMethodGenerator {
         LinkedList<SqlValue> svs = new LinkedList<SqlValue>();
         for (int i = 0; i < this.fields.length; ++i) {
             DBField df = this.fields[i].getAnnotation(DBField.class);
+            String columnName = df.name();
+            columnName=null==columnName?"":columnName.trim();
+            if(columnName.length()==0) columnName =POUtil.fieldName2ColumnName(this.fields[i].getName());
+            
             String iv = df.value().getDefaultSqlValueForInsert();
             if (null != iv && (iv.trim().length() > 0)) {
-                this.fixSqlValue.put(df.name(), iv.trim());
+                this.fixSqlValue.put(columnName, iv.trim());
             } else {
-                svs.add(new SqlValue(1, this.fields[i].getName(), df.name(), df.value()));
+                svs.add(new SqlValue(1, this.fields[i].getName(), columnName, df.value()));
             }
         }
         this.sqlvalues = svs.toArray(new SqlValue[svs.size()]);
@@ -93,7 +97,11 @@ public class InsertTableMG extends UpdateMethodGenerator {
         if (this.psshs.length > 0) {
             sb.append("int paramIndex = 1;");
             for (int i = 0; i < this.psshs.length; ++i) {
+                if(this.psshs[i].isNullable()){
                 this.psshs[i].wirteValue(sb);
+                }else{
+                    this.psshs[i].wirteNotNullValue(sb);
+                }
             }
         }
 

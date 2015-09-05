@@ -29,5 +29,5 @@ public @interface SqlVal {
 	 */
 	String sqlEl() default "";
 	
-	DE dataElement();
+	DE type();
 }

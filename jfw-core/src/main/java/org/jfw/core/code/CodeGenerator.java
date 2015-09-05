@@ -72,8 +72,7 @@ public class CodeGenerator {
         }
     }
 
-    private File getTargetFile(String packageName, String className) throws IOException
-    {
+    private File getTargetFile(String packageName, String className) throws IOException {
         File targetFile = this.sourcePath;
         String[] ss = packageName.split("\\.");
         for (int i = 0; i < ss.length; ++i) {
@@ -84,7 +83,7 @@ public class CodeGenerator {
                 }
             }
         }
-        targetFile = new File(targetFile, className);
+        targetFile = new File(targetFile, className+".java");
         if (targetFile.exists()) {
             if (!overried)
                 return null;
@@ -94,6 +93,7 @@ public class CodeGenerator {
         }
         return targetFile;
     }
+
     private void saveClass(File targetFile, String content) throws IOException {
         FileOutputStream os = new FileOutputStream(targetFile);
         try {
@@ -106,10 +106,10 @@ public class CodeGenerator {
         }
     }
 
-    public void handle(Class<?> clazz) throws IOException {
+    public void handle(Class<?> clazz) throws Exception {
         String packageName = getPkgName4Generator(clazz);
         String simpleClassName = getClassName4Generator(clazz);
-        
+
         Method[] methods = clazz.getMethods();
         Map<Method, MethodCodeGenerator> ms = new HashMap<Method, MethodCodeGenerator>();
         for (Method method : methods) {
@@ -120,59 +120,70 @@ public class CodeGenerator {
         if (ms.size() == 0)
             return;
         File targetFile = getTargetFile(packageName, simpleClassName);
-        if (null== targetFile) return ;
-        
+        if (null == targetFile)
+            return;
+
         StringBuilder sb = new StringBuilder();
-        sb.append("package ").append(packageName).append(";").append("public class ").append(simpleClassName)
-                .append("{");
+        String implOrExtends =clazz.isInterface()?" implements ":" extends ";
+        sb.append("package ").append(packageName).append(";").append("public class ").append(simpleClassName).append(implOrExtends)
+        .append(clazz.getName()).append("{");
         for (Map.Entry<Method, MethodCodeGenerator> entry : ms.entrySet()) {
-            entry.getValue().init(clazz, entry.getKey());
-            sb.append(entry.getValue().build());
+            try {
+                entry.getValue().init(clazz, entry.getKey());
+                sb.append(entry.getValue().build());
+            } catch (Exception e) {
+                throw new Exception("处理方法(" + entry.getKey().getName() + ")错误", e);
+            }
         }
         sb.append("}");
         this.saveClass(targetFile, sb.toString());
     }
-    private static void listClass(File path,String prefix,List<String> list)
-    {
+
+    private static void listClass(File path, String prefix, List<String> list) {
         File[] files = path.listFiles();
-        for(File file:files)
-        {
-            if(file.isFile()&& file.getName().endsWith(".class")){
+        for (File file : files) {
+            if (file.isFile() && file.getName().endsWith(".class")) {
                 String fn = file.getName();
-                fn = fn.substring(0,fn.length()-6);
-                if(fn.indexOf('$')<0){
-                if(prefix==null||prefix.length()==0)
-                {
-                    list.add(fn);
-                }else
-                {
-                    list.add(prefix+"."+fn);
+                fn = fn.substring(0, fn.length() - 6);
+                if (fn.indexOf('$') < 0) {
+                    if (prefix == null || prefix.length() == 0) {
+                        list.add(fn);
+                    } else {
+                        list.add(prefix + "." + fn);
+                    }
                 }
-                }
-            }else{
-                if(prefix==null||prefix.length()==0)
-                {
-                   listClass(file,file.getName(),list);
-                }else
-                {
-                    listClass(file,prefix+"."+file.getName(),list);
+            } else {
+                if (prefix == null || prefix.length() == 0) {
+                    listClass(file, file.getName(), list);
+                } else {
+                    listClass(file, prefix + "." + file.getName(), list);
                 }
             }
         }
     }
-    
-    public static CodeGenerator getHander(File sourcePath,boolean overried)
-    {
+
+    public static CodeGenerator getHander(File sourcePath, boolean overried) {
         return new CodeGenerator(sourcePath, overried);
     }
-    public static void handle(File sourcePath,File classPath,boolean overried) throws IOException, ClassNotFoundException
-    {
+
+    public static void handle(File sourcePath, File classPath, boolean overried) throws Exception {
         CodeGenerator handler = new CodeGenerator(sourcePath, overried);
         List<String> list = new LinkedList<String>();
-        listClass(classPath,null,list);
-        for(String fn:list){
+        listClass(classPath, null, list);
+        for (String fn : list) {
             Class<?> clazz = Class.forName(fn);
-            handler.handle(clazz);
+            try {
+                handler.handle(clazz);
+            } catch (Exception e) {
+                throw new Exception("处理类（" + clazz.getName() + ")错误", e);
+            }
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        File sourcePath = new File("E:\\EclipseProject\\ISS_WorkSpace\\jfw\\jfw-core\\src\\test\\java");
+        File classPath = new File("E:\\EclipseProject\\ISS_WorkSpace\\jfw\\jfw-core\\target\\test-classes");
+        handle(sourcePath, classPath, true);
+        System.out.println("============OK=================");
     }
 }

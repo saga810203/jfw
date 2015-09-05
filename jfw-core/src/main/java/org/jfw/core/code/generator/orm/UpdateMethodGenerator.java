@@ -16,6 +16,6 @@ public abstract class UpdateMethodGenerator extends JDBCMethodGenerator {
 		{
 			if(this.psshs[i].isReplaceResource()) this.psshs[i].replaceResource(sb);
 		}
-		sb.append("retrun result");
+		sb.append("return result;");
 	}
 }

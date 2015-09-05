@@ -1,5 +1,6 @@
 package org.jfw.core.code.generator.annotations.handler.orm;
 
+import org.jfw.core.code.generator.annotations.orm.SelectValue;
 import org.jfw.core.code.generator.annotations.orm.SelectValueList;
 
 public class SelectValueMG extends SelectValueListMG{
@@ -26,7 +27,13 @@ public class SelectValueMG extends SelectValueListMG{
 
     @Override
     public void aferInit() {
-       super.aferInit();
-       this.singleRow = true;
+        this.singleRow = true;
+        this.needNew4ReturnType = false;
+        this.resolveReturnTypeAndSql();
+        this.filter = this.method.getAnnotation(SelectValue.class).filter().trim();
+        this.sqlVals =  this.method.getAnnotation(SelectValue.class).sqlVal();
+        this.sortSqlVals(); 
+        this.and =  this.method.getAnnotation(SelectValue.class).and();
+        this.dynamicFilter =  this.method.getAnnotation(SelectValue.class).dynamicFilter();
     }
 }

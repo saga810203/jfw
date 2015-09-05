@@ -2,13 +2,21 @@ package org.jfw.core.code.generator.annotations.handler.orm;
 
 import java.util.List;
 
+import org.jfw.core.code.generator.annotations.orm.SelectTable;
 import org.jfw.core.code.generator.annotations.orm.SelectViewRow;
 
 public class SelectViewRowMG extends SelectViewMG {
     @Override
     public void aferInit() {
-        super.aferInit();
         this.singleRow = true;
+        this.needNew4ReturnType = true;
+        this.resolveReturnTypeAndSql();
+        this.filter = this.method.getAnnotation(SelectViewRow.class).filter().trim();
+        this.order =  this.method.getAnnotation(SelectViewRow.class).order().trim();
+        this.sqlVals =  this.method.getAnnotation(SelectViewRow.class).sqlVal();
+        this.sortSqlVals();   
+        this.and =  this.method.getAnnotation(SelectViewRow.class).and();
+        this.dynamicFilter =  this.method.getAnnotation(SelectViewRow.class).dynamicFilter();
     }
     protected void resolveReturnTypeAndSql()
     {

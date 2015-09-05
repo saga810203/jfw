@@ -15,7 +15,7 @@ public @interface DBField {
 	 * �ֶ�����SQL�����е�Select ����
 	 * @return
 	 */
-	String name() ;
+	String name() default "" ;
 	/**
 	 * �ֶα�����SQL�����е�Select ����
 	 * һ����VO��ʹ��

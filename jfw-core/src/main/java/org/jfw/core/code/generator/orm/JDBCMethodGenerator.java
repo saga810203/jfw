@@ -24,9 +24,9 @@ public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 	private void initPreparedStatementSetHander(PreparedStatementSetHandler pssh, SqlValue sv) {
        String beanName = "param"+sv.paramIndex;
 		if (sv.field.startsWith(".")) {
-			pssh.init(beanName, null, beanName+sv.field, sv.getDataElement().getFieldClass());
+			pssh.init(beanName, null, beanName+sv.field, sv.getType().getFieldClass(),sv.getType().isNullable());
 		} else {
-			pssh.init(beanName, sv.field, null, sv.getDataElement().getFieldClass());
+			pssh.init(beanName, sv.field, null, sv.getType().getFieldClass(),sv.getType().isNullable());
 		}
 	}
 
@@ -36,7 +36,7 @@ public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 			this.psshs = new PreparedStatementSetHandler[this.sqlvalues.length];
 			for (int i = 0; i < this.sqlvalues.length; ++i) {
 				try {
-					this.psshs[i] = this.sqlvalues[i].getDataElement().getWriteClass().newInstance();
+					this.psshs[i] = this.sqlvalues[i].getType().getWriteClass().newInstance();
 					this.initPreparedStatementSetHander(psshs[i], this.sqlvalues[i]);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
@@ -59,7 +59,7 @@ public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 		sb.append("try{");
 		this.buildQueryParamter(sb);
 		this.buildHandleResult(sb);
-		sb.append("}finally{try{ps.close();}catch(SQLException e){}}");
+		sb.append("}finally{try{ps.close();}catch(java.sql.SQLException e){}}");
 	}
 	protected abstract void buildQueryParamter(StringBuilder sb) ;
 	protected void buildParameters(StringBuilder sb){
@@ -86,7 +86,7 @@ public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 		private int paramIndex;;
 		private String field;
 		private String sqlEl;
-		private DE dataElement;
+		private DE type;
 
 		public int getParamIndex() {
 			return paramIndex;
@@ -100,14 +100,14 @@ public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 			return sqlEl;
 		}
 
-		public DE getDataElement() {
-			return dataElement;
+		public DE getType() {
+			return type;
 		}
 
 		public SqlValue(SqlVal sv) {
 			this.paramIndex = sv.paramIndex();
 			this.field = sv.field().trim();
-			this.dataElement = sv.dataElement();
+			this.type = sv.type();
 			this.sqlEl = sv.sqlEl().trim();
 		}
 
@@ -115,7 +115,7 @@ public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 			this.paramIndex = paramIndex;
 			this.field = field.trim();
 			this.sqlEl = sqlEl.trim();
-			this.dataElement = dataElement;
+			this.type = dataElement;
 		}
 	}
 }

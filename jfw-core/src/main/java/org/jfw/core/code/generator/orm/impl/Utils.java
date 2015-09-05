@@ -45,6 +45,6 @@ public abstract class Utils {
 	
 	public static String  getLocalVarName()
 	{
-		return "tmp_"+indexForLocal;
+		return "tmp_"+indexForLocal++;
 	}
 }

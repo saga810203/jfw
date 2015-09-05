@@ -34,26 +34,24 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
     }
 
     protected void buildQuerySQLWithDynamic(StringBuilder sb) {
-        sb.append("StringBuilder sql = new StringBuilder();")
-           .append(" sql.append(\"").append(this.sql).append("\");");
+        sb.append("StringBuilder sql = new StringBuilder();").append(" sql.append(\"").append(this.sql).append("\");");
         if (this.sqlVals.length == 1) {
-                this.psshs[0].codeBeginCheckInSetOrWhere(sb);
-                   sb.append("sql.append(\" WHERE ").append(this.sqlVals[0].sqlEl()).append("\");");
-                this.psshs[0].codeEndCheckInSetOrWhere(sb);
+            this.psshs[0].codeBeginCheckInSetOrWhere(sb);
+            sb.append("sql.append(\" WHERE ").append(this.sqlVals[0].sqlEl()).append("\");");
+            this.psshs[0].codeEndCheckInSetOrWhere(sb);
         } else {
-           // sb.append("StringBuilder sqlwhere = new StringBuilder();");
-            if(this.sqlVals[0].dataElement().getFieldClass().isPrimitive())
-            {
+            // sb.append("StringBuilder sqlwhere = new StringBuilder();");
+            if (this.sqlVals[0].type().getFieldClass().isPrimitive()) {
                 int beginIndex = 0;
                 sb.append("sql.append(\" WHERE ");
-                for(int i =0 ; i < this.sqlVals.length ; ++i)
-                {
-                    if(!this.sqlVals[i].dataElement().getFieldClass().isPrimitive()){
-                        beginIndex = i ;
+                for (int i = 0; i < this.sqlVals.length; ++i) {
+                    if (!this.sqlVals[i].type().getFieldClass().isPrimitive()) {
+                        beginIndex = i;
                         break;
                     }
-                    if(i!=0)sb.append(this.getAndOr());
-                    sb.append(this.sqlVals[i]);
+                    if (i != 0)
+                        sb.append(this.getAndOr());
+                    sb.append(this.sqlVals[i].sqlEl());
                 }
                 sb.append("\");");
                 for (int i = beginIndex; i < sqlVals.length; ++i) {
@@ -61,7 +59,7 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
                     sb.append("sql.append(\"").append(this.getAndOr()).append(this.sqlVals[i].sqlEl()).append("\");");
                     this.psshs[i].codeEndCheckInSetOrWhere(sb);
                 }
-            }else{
+            } else {
                 sb.append("StringBuilder sqlw = new StringBuilder();");
                 for (int i = 0; i < sqlVals.length; ++i) {
                     this.psshs[i].codeBeginCheckInSetOrWhere(sb);
@@ -69,22 +67,22 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
                     this.psshs[i].codeEndCheckInSetOrWhere(sb);
                 }
                 sb.append("if(sqlw.length()>0){sql.append(\" WHERE \").append(sqlw.toString().substring(")
-                .append(this.and?5:4).append("));}");
-            }  
+                        .append(this.and ? 5 : 4).append("));}");
+            }
         }
         if (null != this.order && this.order.length() > 0) {
             sb.append("sql.append(\"").append(" ORDER BY ").append(this.order).append("\");");
         }
     }
 
-    protected boolean isAllPrimitiveParamter()
-    {
-        for(SqlVal sv:this.sqlVals)
-        {
-            if(!sv.dataElement().getFieldClass().isPrimitive()) return false;
+    protected boolean isAllPrimitiveParamter() {
+        for (SqlVal sv : this.sqlVals) {
+            if (!sv.type().getFieldClass().isPrimitive())
+                return false;
         }
         return true;
     }
+
     @Override
     protected void buildSQL(StringBuilder sb) {
         this.checkSqlVals();
@@ -149,7 +147,7 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
         } else {
             sb.append("return obj;}return null;");
         }
-        sb.append("}finaly{try{rs.close();}catch(SQLException e){}}");
+        sb.append("}finally{try{rs.close();}catch(java.sql.SQLException e){}}");
     }
 
     protected void buildQueryParamter(StringBuilder sb) {
@@ -157,7 +155,11 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
             sb.append("int paramIndex = 1;");
             if (this.dynamicSql) {
                 for (int i = 0; i < this.psshs.length; ++i) {
-                    this.psshs[i].wirteValueWithCheck(sb);
+                    if (this.sqlVals[i].type().getFieldClass().isPrimitive()) {
+                        this.psshs[i].wirteNotNullValue(sb);
+                    } else {
+                        this.psshs[i].wirteValueWithCheck(sb);
+                    }
                 }
             } else {
                 for (int i = 0; i < this.psshs.length; ++i) {
@@ -175,15 +177,15 @@ public abstract class SelectMethodGenerator extends JDBCMethodGenerator {
 
             @Override
             public int compare(SqlVal o1, SqlVal o2) {
-                if (o1.dataElement().getFieldClass().isPrimitive()) {
-                    if (o2.dataElement().getFieldClass().isPrimitive()) {
+                if (o1.type().getFieldClass().isPrimitive()) {
+                    if (o2.type().getFieldClass().isPrimitive()) {
                         return 0;
                     } else {
                         return -1;
                     }
 
                 } else {
-                    if (o2.dataElement().getFieldClass().isPrimitive()) {
+                    if (o2.type().getFieldClass().isPrimitive()) {
                         return 1;
                     } else {
                         return 0;

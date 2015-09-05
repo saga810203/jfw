@@ -59,12 +59,14 @@ public class SelectTableMG extends SelectMethodGenerator {
 		this.singleRow = false;
 		this.needNew4ReturnType = true;
 		this.resolveReturnTypeAndSql();
-		this.filter = this.parentType.getAnnotation(SelectTable.class).filter().trim();
-		this.order =  this.parentType.getAnnotation(SelectTable.class).order().trim();
-		this.sqlVals =  this.parentType.getAnnotation(SelectTable.class).sqlVal();
+		this.filter = this.method.getAnnotation(SelectTable.class).filter();
+		this.filter = null== this.filter?"":this.filter.trim();
+		this.order =  this.method.getAnnotation(SelectTable.class).order();
+		this.order = null== this.order?"":this.order.trim();
+		this.sqlVals =  this.method.getAnnotation(SelectTable.class).sqlVal();
 		this.sortSqlVals();		
-        this.and =  this.parentType.getAnnotation(SelectTable.class).and();
-        this.dynamicFilter =  this.parentType.getAnnotation(SelectTable.class).dynamicFilter();
+        this.and =  this.method.getAnnotation(SelectTable.class).and();
+        this.dynamicFilter =  this.method.getAnnotation(SelectTable.class).dynamicFilter();
  	}
 
 }

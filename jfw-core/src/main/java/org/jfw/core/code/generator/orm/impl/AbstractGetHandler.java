@@ -21,10 +21,10 @@ public abstract class AbstractGetHandler implements ResultSetGetHandler {
 			String fieldName,Class<?> javaType) {
 		if (colIndex <= 0) {
 			this.el4Read = "rs."+this.getMethodName4JDBCRead()+"(\"" + colName.trim() + "\")";
-			this.el4WasNull = "rs.wasNull(\"" + colName.trim() + "\")";
+			this.el4WasNull = "rs.wasNull()";
 		} else {
 			this.el4Read = "rs."+this.getMethodName4JDBCRead()+"(" + colIndex + ")";
-			this.el4WasNull = "rs.wasNull(" + colIndex + ")";
+			this.el4WasNull = "rs.wasNull()";
 		}
 		//当fieldName为null时只读一列值
 		if(fieldName!=null)this.el4Write = "obj." + Utils.getSetter(fieldName);

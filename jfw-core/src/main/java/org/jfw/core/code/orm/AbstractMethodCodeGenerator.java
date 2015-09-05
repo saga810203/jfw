@@ -86,6 +86,7 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 	public String build()
 	{
 		StringBuilder sb = new StringBuilder();
+		sb.append("\r\n@Override\r\n");
 		Utils.resetLocalVarName();
 	    int modifiers = this.method.getModifiers();
 //        Modifier.PUBLIC         | Modifier.PROTECTED    | Modifier.PRIVATE |
@@ -100,9 +101,9 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 	    this.buildParameters(sb);
 	    sb.append(") ");
 	    this.buildThrows(sb);
-	    sb.append("{");
+	    sb.append("\r\n{\r\n");
 	    this.buildContent(sb);
-	    sb.append("}");
+	    sb.append("\r\n}\r\n");
 		return sb.toString();
 	}
 	protected abstract void buildParameters(StringBuilder sb) ;

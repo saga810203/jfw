@@ -45,13 +45,24 @@ public enum DE {
     BigDecimal("DA0003", "REAL", -1, -1,false,true,true,true,null,true,null,BigDecimalGet.class,BigDecimalSet.class,java.math.BigDecimal.class),
     BIGDECIMAL("DA0004", "REAL", -1, -1,true,true,true,true,null,true,null,BigDecimalGet.class,BigDecimalSet.class,java.math.BigDecimal.class),   
     
-    BOOL("DA0001", "CHAR", 1, -1,true,true,true,true,null,true,null,BooleanGet.class,BooleanSet.class,boolean.class),
-    Bool("DA0002", "CHAR", 1, -1,false,true,true,true,null,true,null,BooleanGet.class,BooleanSet.class,Boolean.class),
+    BOOLEAN("DA0001", "CHAR", 1, -1,true,true,true,true,null,true,null,BooleanGet.class,BooleanSet.class,Boolean.class),
+    Boolean("DA0002", "CHAR", 1, -1,false,true,true,true,null,true,null,BooleanGet.class,BooleanSet.class,boolean.class),
     
 
     STRING("DA0001", "CHAR", 255, -1,true,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
-    string("DA0002", "CHAR", 255, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class);
+    string("DA0002", "CHAR", 255, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
 //	int_INTEGER
+    
+    Y4M2D2("DA0002", "CHAR", 8, -1,true,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
+    y4m2d2("DA0002", "CHAR", 8, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
+    
+    Y4M2D2H2M2S2("DA0002", "CHAR", 14, -1,true,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
+    y4m2d2h2m2s2("DA0002", "CHAR",14, -1,false,true,true,true,null,true,null,StringGet.class,StringSet.class,String.class),
+    createTime("DA0002", "CHAR", 14, -1,false,true,true,true,"to_char('YYYYMMDDHH24MISS',SYSDATE)",false,null,StringGet.class,StringSet.class,String.class),
+    modifyTime("DA0002", "CHAR",14, -1,false,true,true,true,"to_char('YYYYMMDDHH24MISS',SYSDATE)",true,"to_char('YYYYMMDDHH24MISS',SYSDATE)",StringGet.class,StringSet.class,String.class);
+    
+    
+    
 
 	private DE(String id, String typeForDataBase, int length, int secondlength,
 			boolean nullable,boolean canFilter,

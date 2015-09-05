@@ -1,8 +1,8 @@
 package org.jfw.core.code.generator.orm;
 
 public interface PreparedStatementSetHandler {
-void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType);
-	
+void init(String beanName,String fieldName,String el4ReadValue,Class<?> javaType,boolean nullable);
+	boolean isNullable();
 	//赋后是否需要释放资源：如BLOB,
     boolean isReplaceResource();
 	/**

@@ -17,7 +17,7 @@ public class BooleanGet extends AbstractGetHandler {
                         .append("(null);").append("}else{").append(this.el4Write).append("(")
                         .append(local).append(");}");
             } else {
-                sb.append(this.el4Write).append("((\"1\".equals(").append(this.el4Read).append("));");
+                sb.append(this.el4Write).append("(\"1\".equals(").append(this.el4Read).append("));");
             }
         } else {
             if (this.nullable && (!this.javaType.isPrimitive())) {

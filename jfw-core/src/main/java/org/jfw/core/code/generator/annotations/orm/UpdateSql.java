@@ -14,6 +14,7 @@ public @interface UpdateSql {
 	String value();
 	SqlVal[] sqlvalue() default {};
 	SqlVal[] where() default{};
+	boolean dynamicWhere() default false;
     boolean bulidMehtod() default true;
     Class<? extends MethodCodeGenerator> buildHandleClass() default UpdateSqlMG.class;
 }
