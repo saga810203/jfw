@@ -2,7 +2,6 @@ package org.jfw.core.code.generator.annotations.handler.orm;
 
 import java.util.List;
 
-import org.jfw.core.code.generator.annotations.orm.SelectTable;
 import org.jfw.core.code.generator.annotations.orm.SelectViewRow;
 
 public class SelectViewRowMG extends SelectViewMG {

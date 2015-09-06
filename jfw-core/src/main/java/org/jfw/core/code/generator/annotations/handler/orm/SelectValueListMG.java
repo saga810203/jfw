@@ -1,6 +1,5 @@
 package org.jfw.core.code.generator.annotations.handler.orm;
 
-import org.jfw.core.code.generator.annotations.orm.SelectTable;
 import org.jfw.core.code.generator.annotations.orm.SelectValueList;
 import org.jfw.core.code.generator.enums.orm.DE;
 import org.jfw.core.code.generator.orm.SelectMethodGenerator;

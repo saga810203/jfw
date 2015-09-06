@@ -4,7 +4,7 @@ public class LongSet  extends AbstractSetHandler{
 
     @Override
     protected String getMethodName4JDBCWrite() {
-        return "getLong";
+        return "setLong";
     }
 
     @Override
