@@ -6,8 +6,8 @@ import org.jfw.core.code.CodeGenerator;
 public class Main {
 
     public static void main(String[] args) throws Exception{
-        File sourcePath = new File("E:\\EclipseProject\\ISS_WorkSpace\\jfw\\jfw-core\\src\\test\\java");
-        File classPath =  new File("E:\\EclipseProject\\ISS_WorkSpace\\jfw\\jfw-core\\target\\test-classes");
+        File sourcePath = new File("E:\\IOC\\jfw\\jfw-core\\src\\test\\java");
+        File classPath =  new File("E:\\IOC\\jfw\\jfw-core\\target\\test-classes");
         CodeGenerator.handle(sourcePath,classPath,true);
         System.out.println("============OK=================");
     }

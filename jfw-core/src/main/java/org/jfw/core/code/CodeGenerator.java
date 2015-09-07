@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.jfw.core.code.generator.annotations.ThreadSafe;
+
 public class CodeGenerator {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private File sourcePath;
@@ -52,8 +54,10 @@ public class CodeGenerator {
         String subPkgName = null;
         if (clazz.isInterface()) {
             subPkgName = "impl";
-        } else {
+        } else if (null==clazz.getAnnotation(ThreadSafe.class) || clazz.getAnnotation(ThreadSafe.class).value())  {
             subPkgName = "extends";
+        }else {
+        	subPkgName="wrap";
         }
         if (pkgName != null && pkgName.length() > 0) {
             return pkgName + "." + subPkgName;
@@ -67,8 +71,10 @@ public class CodeGenerator {
 
         if (clazz.isInterface()) {
             return sName + "Impl";
-        } else {
+        } else if (null==clazz.getAnnotation(ThreadSafe.class) || clazz.getAnnotation(ThreadSafe.class).value()) {
             return sName + "Extends";
+        } else {
+        	return sName+"Wrap";
         }
     }
 
@@ -105,6 +111,15 @@ public class CodeGenerator {
             }
         }
     }
+    private String getParentClass(Class<?> clazz){
+    	  if (clazz.isInterface()) {
+              return " implements "+clazz.getName();
+          } else if (null==clazz.getAnnotation(ThreadSafe.class) || clazz.getAnnotation(ThreadSafe.class).value()) {
+              return " extends "+clazz.getName();
+          } else {
+          	return "";
+          }
+    }
 
     public void handle(Class<?> clazz) throws Exception {
         String packageName = getPkgName4Generator(clazz);
@@ -124,9 +139,7 @@ public class CodeGenerator {
             return;
 
         StringBuilder sb = new StringBuilder();
-        String implOrExtends =clazz.isInterface()?" implements ":" extends ";
-        sb.append("package ").append(packageName).append(";").append("public class ").append(simpleClassName).append(implOrExtends)
-        .append(clazz.getName()).append("{");
+        sb.append("package ").append(packageName).append(";").append("public class ").append(simpleClassName).append(this.getParentClass(clazz)).append("{");
         for (Map.Entry<Method, MethodCodeGenerator> entry : ms.entrySet()) {
             try {
                 entry.getValue().init(clazz, entry.getKey());
