@@ -1,6 +1,7 @@
 package org.jfw.core.code.generator.orm.impl;
 
 import org.jfw.core.code.generator.orm.ResultSetGetHandler;
+import org.jfw.core.code.utils.Utils;
 /**
  * 处理简单的数据，不需数据转换，BLOB，CLOB,的处理别行处理
  * @author pengjia

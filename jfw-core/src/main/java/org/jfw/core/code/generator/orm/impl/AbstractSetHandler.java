@@ -1,6 +1,7 @@
 package org.jfw.core.code.generator.orm.impl;
 
 import org.jfw.core.code.generator.orm.PreparedStatementSetHandler;
+import org.jfw.core.code.utils.Utils;
 
 public abstract class AbstractSetHandler implements PreparedStatementSetHandler {
     protected String el4Read;

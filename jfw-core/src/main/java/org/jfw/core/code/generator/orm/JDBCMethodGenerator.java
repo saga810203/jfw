@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import org.jfw.core.code.generator.annotations.orm.SqlVal;
 import org.jfw.core.code.generator.enums.orm.DE;
 import org.jfw.core.code.orm.AbstractMethodCodeGenerator;
+import org.jfw.core.code.utils.Utils;
 
 public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 	protected boolean dynamicSql = false;
@@ -69,7 +70,7 @@ public abstract class JDBCMethodGenerator extends AbstractMethodCodeGenerator {
 	    for(int i = 0 ; i < ts.length ; ++i)
 	    {
 	        if (i!= 0 ) sb.append(",");
-	        writeNameOfType(ts[i], sb);
+	        Utils.writeNameOfType(ts[i], sb);
 	        sb.append(" ");
 	        if (java.sql.Connection.class==ts[i]){
 	            if(i!=0 ) throw new IllegalArgumentException("java.sql.Connection must at index 0 in method");

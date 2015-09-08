@@ -1,5 +1,7 @@
 package org.jfw.core.code.generator.orm.impl;
 
+import org.jfw.core.code.utils.Utils;
+
 public class BooleanSet extends AbstractSetHandler {
 
     protected  String getMethodName4JDBCWrite(){

@@ -1,17 +1,13 @@
 package org.jfw.core.code.orm;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 
 import org.jfw.core.code.MethodCodeGenerator;
 import org.jfw.core.code.generator.annotations.orm.Final;
-import org.jfw.core.code.generator.orm.impl.Utils;
+import org.jfw.core.code.utils.Utils;
 
 public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator {
 	protected Class<?> parentType;
@@ -31,57 +27,7 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 	public abstract void aferInit();
 	
 	
-	public static void writeNameOfType(Type type,StringBuilder sb)
-	{
-			if (type instanceof Class)
-			{
-				Class<?> cl = (Class<?>)type;
-				if(cl.isArray()){
-				    writeNameOfType(cl.getComponentType(),sb);
-					sb.append("[]");
-				}else {
-					sb.append(cl.getName());
-				}
-			}else if (type instanceof GenericArrayType)
-			{
-				writeNameOfType(((GenericArrayType)type).getGenericComponentType(),sb);
-				sb.append("[]");
-			}else  if (type instanceof ParameterizedType)
-			{
-				ParameterizedType pt = (ParameterizedType)type;
-				writeNameOfType(pt.getRawType(),sb);
-				sb.append("<");
-				Type[] ts = pt.getActualTypeArguments();
-				for(int i =0;i<ts.length; ++i)
-				{
-					if(i!=0) sb.append(",");
-					writeNameOfType(ts[i],sb);
-				}
-				sb.append(">");
-			}else  if (type instanceof TypeVariable)
-			{
-				TypeVariable<?> tt =(TypeVariable<?>)type;
-				sb.append(tt.getName()).append(" extends ");
-				Type[] ts = tt.getBounds();
-				for(int i = 0 ; i < ts.length ;++i)
-				{
-					if(i!=0 )sb.append(" & ");
-					writeNameOfType(ts[i],sb);
-				}				
-			}else   if (type instanceof WildcardType)
-			{
-				WildcardType wt =(WildcardType)type;
-				sb.append("?");
-				if(wt.getLowerBounds().length>0){
-					sb.append(" super ");
-					writeNameOfType(wt.getLowerBounds()[0], sb);
-				}else if (Object.class != wt.getUpperBounds()[0]) {
-					sb.append(" extends ");
-					writeNameOfType(wt.getUpperBounds()[0], sb);
-				}
-				
-			}
-	}
+	
 	@Override
 	public String build()
 	{
@@ -96,7 +42,7 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 	    if(null != this.method.getAnnotation(Final.class)) sb.append("final ");
 	   sb.append("public ");
 	    //if (Modifier.isStatic(modifiers)) sb.append("static ");
-	    writeNameOfType(this.method.getGenericReturnType(), sb);
+	    Utils.writeNameOfType(this.method.getGenericReturnType(), sb);
 	    sb.append(" ").append(this.method.getName()).append("(");
 	    this.buildParameters(sb);
 	    sb.append(") ");
@@ -116,7 +62,7 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 	        for(int i = 0 ; i < ts.length ;++i)
 	        {
 	            if(i != 0 )sb.append(",");
-	            writeNameOfType(ts[i], sb);
+	            Utils.writeNameOfType(ts[i], sb);
 	        }
 	    }
 	    
