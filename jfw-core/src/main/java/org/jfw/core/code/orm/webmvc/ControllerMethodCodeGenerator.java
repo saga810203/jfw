@@ -11,6 +11,28 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	protected Method method;
 	protected Controller ctrl;
 	protected Handler[] handlers;
+	protected StringBuilder sb ;
+	private boolean readStringArray= false;
+	private boolean readString = false;
+	
+	public void readParameters(String paramName)
+	{
+	    if (!readStringArray) {
+	        readStringArray = true;
+	        sb.append("String[] ");
+	    }
+	    sb.append(" params = req.getParameters(\"").append(paramName).append("\");");
+	}
+	   public void readParameter(String paramName)
+	    {
+	        if (!readString) {
+	            readString = true;
+	            sb.append("String ");
+	        }
+	        sb.append(" param = req.getParameter(\"").append(paramName).append("\");");
+	    }
+
+	
 	
 	public Class<?> getSourceClass() {
 		return sourceClass;
@@ -53,7 +75,9 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	@Override
 	public String build() {
 		Utils.resetLocalVarName();
-		StringBuilder sb = new StringBuilder();
+		
+		
+		sb = new StringBuilder();
 		sb.append("public void ").append(this.method.getName())
 		.append("(javax.servlet.http.HttpServletRequest req,javax.servlet.http.HttpServletResponse res) ")
 		.append(" throws javax.servlet.ServletException,java.io.IOException{\r\n");
