@@ -1,7 +1,7 @@
-package org.jfw.core.code.orm.webmvc.handler;
+package org.jfw.core.code.webmvc.handler;
 
 import org.jfw.core.code.generator.annotations.ThreadSafe;
-import org.jfw.core.code.orm.webmvc.Handler;
+import org.jfw.core.code.webmvc.Handler;
 import org.jfw.core.code.utils.Utils;
 
 public class ExecuteHandler extends Handler {

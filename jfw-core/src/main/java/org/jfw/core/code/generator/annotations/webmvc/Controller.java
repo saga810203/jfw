@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.jfw.core.code.MethodCodeGenerator;
-import org.jfw.core.code.orm.webmvc.ControllerMethodCodeGenerator;
-import org.jfw.core.code.orm.webmvc.Handler;
-import org.jfw.core.code.orm.webmvc.handler.ExecuteHandler;
+import org.jfw.core.code.webmvc.ControllerMethodCodeGenerator;
+import org.jfw.core.code.webmvc.Handler;
+import org.jfw.core.code.webmvc.handler.ExecuteHandler;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

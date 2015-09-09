@@ -1,4 +1,4 @@
-package org.jfw.core.code.orm.webmvc;
+package org.jfw.core.code.webmvc;
 
 import java.lang.reflect.Method;
 

@@ -1,10 +1,10 @@
-package org.jfw.core.code.orm.webmvc.handler;
+package org.jfw.core.code.webmvc.handler;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-import org.jfw.core.code.orm.webmvc.ControllerMethodCodeGenerator;
-import org.jfw.core.code.orm.webmvc.Handler;
+import org.jfw.core.code.webmvc.ControllerMethodCodeGenerator;
+import org.jfw.core.code.webmvc.Handler;
 
 public class BuildParamHandler extends Handler {
     private Type[] params;
