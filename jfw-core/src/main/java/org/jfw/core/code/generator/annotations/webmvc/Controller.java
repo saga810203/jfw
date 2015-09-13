@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 import org.jfw.core.code.MethodCodeGenerator;
 import org.jfw.core.code.webmvc.ControllerMethodCodeGenerator;
 import org.jfw.core.code.webmvc.Handler;
+import org.jfw.core.code.webmvc.handler.BuildParamHandler;
 import org.jfw.core.code.webmvc.handler.ExecuteHandler;
 
 @Target(ElementType.METHOD)
@@ -17,7 +18,7 @@ public @interface Controller {
 	 boolean bulidMehtod() default true;
 	 Class<? extends MethodCodeGenerator> buildHandleClass() default ControllerMethodCodeGenerator.class;
 	Class<? extends Handler>[] handlers() default {
-		
+		BuildParamHandler.class,
 		ExecuteHandler.class
 	};	
 }
