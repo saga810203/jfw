@@ -14,6 +14,7 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	protected StringBuilder sb ;
 	private boolean readStringArray= false;
 	private boolean readString = false;
+	private boolean readHeaders= false;
 	
 	public void readParameters(String paramName)
 	{
@@ -23,6 +24,23 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	    }
 	    sb.append(" params = req.getParameters(\"").append(paramName).append("\");");
 	}
+	public void readHeaders(String paramName){
+	    if(!this.readHeaders){
+	        readHeaders = true;
+	        sb.append("java.util.List<Stirng> headers = new java.util.LinkedList<String>();");
+	        sb.append("java.util.Enumeration<String> ");
+	    }
+        sb.append("enumHeaders = req.getHeaders(\"").append(paramName).append("\");\r\n");
+        sb.append("headers.clear();\r\n");
+        sb.append("while(enumHeaders.hasMoreElements()){\r\n")
+           .append("  headers.add(enumHeaders.nextElement());\r\n")
+           .append("}\r\n");
+        if (!readStringArray) {
+            readStringArray = true;
+            sb.append("String[] ");
+        }
+        sb.append("params =headers.toArray(new String[headers.size()];");
+        }
 	   public void readParameter(String paramName)
 	    {
 	        if (!readString) {
@@ -31,6 +49,14 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	        }
 	        sb.append(" param = req.getParameter(\"").append(paramName).append("\");");
 	    }
+       public void readHeader(String paramName)
+       {
+           if (!readString) {
+               readString = true;
+               sb.append("String ");
+           }
+           sb.append("param = req.getHeader(\"").append(paramName).append("\");");
+       }
 
 	
 	

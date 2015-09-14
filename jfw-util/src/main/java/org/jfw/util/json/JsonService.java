@@ -1,11 +1,11 @@
-package org.jfw.util;
+package org.jfw.util.json;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
 
-public class JsonSerrvice {
+public class JsonService {
 
 	private static Gson gson;
 
@@ -30,7 +30,6 @@ public class JsonSerrvice {
 	public static <T> T fromJson(Reader json, Type typeOfT) {
 		return gson.fromJson(json, typeOfT);
 	}
-
 	static {
 		// create gson by JsonConfig
 		gson = new Gson();
