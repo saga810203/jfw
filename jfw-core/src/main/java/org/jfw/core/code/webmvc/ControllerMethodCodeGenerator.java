@@ -15,6 +15,14 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	private boolean readStringArray= false;
 	private boolean readString = false;
 	private boolean readHeaders= false;
+	private boolean readSession=false;
+	
+	public void readSession(){
+	    if(!readSession){
+	        readSession = true;
+	        sb.append(" javax.servlet.http.HttpSession session = req.getSession();");
+	    }
+	}
 	
 	public void readParameters(String paramName)
 	{
