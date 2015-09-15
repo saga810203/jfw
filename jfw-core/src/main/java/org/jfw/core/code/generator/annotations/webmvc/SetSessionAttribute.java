@@ -5,12 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.PARAMETER)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FieldParam {
-    String value() ;
-    String paramName() default "";
-    Class<?> clazz() default Object.class;
-    String defaultValue() default "null";
-    boolean required() default true;
+public @interface SetSessionAttribute {
+	String value() default "";
+	String attributeName();
 }

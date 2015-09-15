@@ -11,7 +11,11 @@ public class SessionAttributeHandler extends BuildParamHandler.BuildParameter{
 
     @Override
     public void build(StringBuilder sb, int index, Type type, ControllerMethodCodeGenerator cmcg, Object annotation) {
-        SessionAttribute sa =(SessionAttribute)annotation;
+       if(type instanceof Class<?>&&(((Class<?>)type).isPrimitive())){
+    	   throw new RuntimeException("annotion @SessionAttribute don't decorate primitive type");
+       }
+    	
+    	SessionAttribute sa =(SessionAttribute)annotation;
         cmcg.readSession();
         if(sa.required()){
             String localName = Utils.getLocalVarName();
@@ -24,7 +28,8 @@ public class SessionAttributeHandler extends BuildParamHandler.BuildParameter{
              Utils.writeNameOfType(type, sb);
              sb.append(")").append(localName).append(";");           
         }else{
-            
+        	 Utils.writeNameOfType(type, sb);
+             sb.append(" param").append(index).append(" = session.getAttribute(\"").append(sa.value().trim()).append("\");\r\n");   
         }
     }
 

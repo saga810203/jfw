@@ -10,6 +10,8 @@ import org.jfw.core.code.webmvc.ControllerMethodCodeGenerator;
 import org.jfw.core.code.webmvc.Handler;
 import org.jfw.core.code.webmvc.handler.BuildParamHandler;
 import org.jfw.core.code.webmvc.handler.ExecuteHandler;
+import org.jfw.core.code.webmvc.handler.SetSessionAttributeHandler;
+import org.jfw.core.code.webmvc.handler.ViewHandler;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,6 +21,8 @@ public @interface Controller {
 	 Class<? extends MethodCodeGenerator> buildHandleClass() default ControllerMethodCodeGenerator.class;
 	Class<? extends Handler>[] handlers() default {
 		BuildParamHandler.class,
-		ExecuteHandler.class
+		ViewHandler.class,
+		ExecuteHandler.class,
+		SetSessionAttributeHandler.class		
 	};	
 }
