@@ -10,6 +10,7 @@ import org.jfw.core.code.webmvc.ControllerMethodCodeGenerator;
 import org.jfw.core.code.webmvc.Handler;
 import org.jfw.core.code.webmvc.handler.BuildParamHandler;
 import org.jfw.core.code.webmvc.handler.ExecuteHandler;
+import org.jfw.core.code.webmvc.handler.RemoveSessionAttributeHandler;
 import org.jfw.core.code.webmvc.handler.SetSessionAttributeHandler;
 import org.jfw.core.code.webmvc.handler.ViewHandler;
 
@@ -23,6 +24,7 @@ public @interface Controller {
 		BuildParamHandler.class,
 		ViewHandler.class,
 		ExecuteHandler.class,
-		SetSessionAttributeHandler.class		
+		SetSessionAttributeHandler.class,
+		RemoveSessionAttributeHandler.class
 	};	
 }

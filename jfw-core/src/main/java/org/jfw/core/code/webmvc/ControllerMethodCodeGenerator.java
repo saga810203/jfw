@@ -16,7 +16,14 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	private boolean readString = false;
 	private boolean readHeaders= false;
 	private boolean readSession=false;
+	private boolean readOut = false;
 	
+	public void readOut(){
+	    if(!readOut){
+	        readOut = true;
+	        sb.append("java.io.PrintWriter out = res.getWriter();");
+	    }
+	}
 	public void readSession(){
 	    if(!readSession){
 	        readSession = true;
