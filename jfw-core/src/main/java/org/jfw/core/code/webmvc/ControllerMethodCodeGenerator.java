@@ -12,36 +12,50 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	protected Controller ctrl;
 	protected Handler[] handlers;
 	protected StringBuilder sb ;
-	private boolean readStringArray= false;
-	private boolean readString = false;
-	private boolean readHeaders= false;
-	private boolean readSession=false;
-	private boolean readOut = false;
-	
+	private boolean readedStringArray= false;
+	private boolean readedString = false;
+	private boolean readedHeaders= false;
+	private boolean readedSession=false;
+	private boolean readedOut = false;
+	private boolean readedURI= false;
+	public void readURI(int skipChars){
+	    if(0> skipChars) {
+	    throw new RuntimeException("@PathVar  skipChars is not less zero");    
+	    }
+	        if(!readedURI){
+	            readedURI = true;
+	            sb.append("String uri =org.jfw.util.WebUtil.normalize(res.getRequestURI());\r\n")
+	               .append("String[] uriArray = uri");
+	            if(skipChars>0){
+	            sb.append(".substring(").append(skipChars).append(")");
+	            }
+	            sb.append(".split(\"/\");\r\n");	            
+	        }
+	    }
 	public void readOut(){
-	    if(!readOut){
-	        readOut = true;
+	    if(!readedOut){
+	        readedOut = true;
 	        sb.append("java.io.PrintWriter out = res.getWriter();");
 	    }
 	}
 	public void readSession(){
-	    if(!readSession){
-	        readSession = true;
+	    if(!readedSession){
+	        readedSession = true;
 	        sb.append(" javax.servlet.http.HttpSession session = req.getSession();");
 	    }
 	}
 	
 	public void readParameters(String paramName)
 	{
-	    if (!readStringArray) {
-	        readStringArray = true;
+	    if (!readedStringArray) {
+	        readedStringArray = true;
 	        sb.append("String[] ");
 	    }
 	    sb.append(" params = req.getParameters(\"").append(paramName).append("\");");
 	}
 	public void readHeaders(String paramName){
-	    if(!this.readHeaders){
-	        readHeaders = true;
+	    if(!this.readedHeaders){
+	        readedHeaders = true;
 	        sb.append("java.util.List<Stirng> headers = new java.util.LinkedList<String>();");
 	        sb.append("java.util.Enumeration<String> ");
 	    }
@@ -50,24 +64,24 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
         sb.append("while(enumHeaders.hasMoreElements()){\r\n")
            .append("  headers.add(enumHeaders.nextElement());\r\n")
            .append("}\r\n");
-        if (!readStringArray) {
-            readStringArray = true;
+        if (!readedStringArray) {
+            readedStringArray = true;
             sb.append("String[] ");
         }
         sb.append("params =headers.toArray(new String[headers.size()];");
         }
 	   public void readParameter(String paramName)
 	    {
-	        if (!readString) {
-	            readString = true;
+	        if (!readedString) {
+	            readedString = true;
 	            sb.append("String ");
 	        }
 	        sb.append(" param = req.getParameter(\"").append(paramName).append("\");");
 	    }
        public void readHeader(String paramName)
        {
-           if (!readString) {
-               readString = true;
+           if (!readedString) {
+               readedString = true;
                sb.append("String ");
            }
            sb.append("param = req.getHeader(\"").append(paramName).append("\");");

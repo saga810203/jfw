@@ -21,8 +21,8 @@ public @interface Controller {
 	 boolean bulidMehtod() default true;
 	 Class<? extends MethodCodeGenerator> buildHandleClass() default ControllerMethodCodeGenerator.class;
 	Class<? extends Handler>[] handlers() default {
-		BuildParamHandler.class,
-		ViewHandler.class,
+	    ViewHandler.class,
+	    BuildParamHandler.class,
 		ExecuteHandler.class,
 		SetSessionAttributeHandler.class,
 		RemoveSessionAttributeHandler.class
