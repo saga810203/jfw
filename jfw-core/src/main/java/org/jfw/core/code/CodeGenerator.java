@@ -49,7 +49,7 @@ public class CodeGenerator {
         return null;
     }
 
-    private static String getPkgName4Generator(Class<?> clazz) {
+    public static String getPkgName4Generator(Class<?> clazz) {
         String pkgName = clazz.getPackage().getName();
         String subPkgName = null;
         if (clazz.isInterface()) {
@@ -66,7 +66,7 @@ public class CodeGenerator {
         }
     }
 
-    private static String getClassName4Generator(Class<?> clazz) {
+    public static String getClassName4Generator(Class<?> clazz) {
         String sName = clazz.getSimpleName();
 
         if (clazz.isInterface()) {

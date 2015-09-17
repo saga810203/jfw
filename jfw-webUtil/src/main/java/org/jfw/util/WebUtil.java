@@ -1,5 +1,6 @@
 package org.jfw.util;
 
+
 public abstract class WebUtil {
     public static String normalize(String path) {
         char[] chars = path.toCharArray();

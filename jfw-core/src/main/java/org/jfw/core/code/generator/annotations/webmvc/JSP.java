@@ -6,9 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.jfw.core.code.webmvc.handler.ViewHandler;
-import org.jfw.core.code.webmvc.handler.view.JsonView;
+import org.jfw.core.code.webmvc.handler.view.JspView;
+
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JsonBody {
-   Class<? extends ViewHandler.BuildView> buildViewClass() default JsonView.class;
+public @interface JSP {
+	String value();
+	String prefix() default "";
+	Class<? extends ViewHandler.BuildView> buildViewClass() default JspView.class;
 }

@@ -113,7 +113,8 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	public void init(Class<?> parentType, Method method) {
 		this.method = method;
 		this.sourceClass = parentType;	
-		this.ctrl = parentType.getAnnotation(Controller.class);	
+		this.ctrl = method.getAnnotation(Controller.class);	
+		if(this.ctrl.value() ==null) throw new RuntimeException("@Controller 属性value不能为空");
 		Class<? extends Handler>[] cls = this.ctrl.handlers();
 		this.handlers = new Handler[cls.length];
 		for(int i = 0 ; i < cls.length ; ++i){
@@ -130,7 +131,7 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator{
 	@Override
 	public String build() {
 		Utils.resetLocalVarName();
-		
+		if (this.ctrl.value()==null)
 		
 		sb = new StringBuilder();
 		sb.append("public void ").append(this.method.getName())
