@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
+import org.jfw.core.code.CodeGenerator;
 import org.jfw.core.code.MethodCodeGenerator;
 import org.jfw.core.code.generator.annotations.orm.Final;
 import org.jfw.core.code.utils.Utils;
@@ -14,7 +15,7 @@ public abstract class AbstractMethodCodeGenerator implements MethodCodeGenerator
 	protected Method method;
 	protected Annotation[] annotations;
 	@Override
-	public void init(Class<?> parentType,Method method)
+	public void init(Class<?> parentType,Method method,CodeGenerator cg)
 	{
 		this.method = method;
 		if(!Modifier.isAbstract(method.getModifiers())&& !method.getDeclaringClass().isInterface()  ){

@@ -16,12 +16,37 @@ import org.jfw.core.code.generator.annotations.ThreadSafe;
 public class CodeGenerator {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private File sourcePath;
-
     private boolean overried;
+    private Map<Object,Object> attribute = new HashMap<Object,Object>();
 
     private CodeGenerator(File sourcePath, boolean overried) {
         this.sourcePath = sourcePath;
         this.overried = overried;
+    }
+
+    public File getSourcePath() {
+        return sourcePath;
+    }
+
+    public void setSourcePath(File sourcePath) {
+        this.sourcePath = sourcePath;
+    }
+
+    public boolean isOverried() {
+        return overried;
+    }
+
+    public void setOverried(boolean overried) {
+        this.overried = overried;
+    }
+    public void setAttribute(Object key,Object value){
+        this.attribute.put(key, value);
+    }
+    public Object getAttribute(Object key){
+        return this.attribute.get(key);
+    }
+    public boolean hasAttribute(Object key){
+        return this.attribute.containsKey(key);
     }
 
     public static MethodCodeGenerator getGenerator(Method method) {
@@ -142,7 +167,7 @@ public class CodeGenerator {
         sb.append("package ").append(packageName).append(";").append("public class ").append(simpleClassName).append(this.getParentClass(clazz)).append("{");
         for (Map.Entry<Method, MethodCodeGenerator> entry : ms.entrySet()) {
             try {
-                entry.getValue().init(clazz, entry.getKey());
+                entry.getValue().init(clazz, entry.getKey(),this);
                 sb.append(entry.getValue().build());
             } catch (Exception e) {
                 throw new Exception("处理方法(" + entry.getKey().getName() + ")错误", e);
