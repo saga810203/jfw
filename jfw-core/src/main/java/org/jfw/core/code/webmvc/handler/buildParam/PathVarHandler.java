@@ -69,7 +69,7 @@ public class PathVarHandler extends BuildParamHandler.BuildParameter {
 	@Override
 	public void build(StringBuilder sb, int index, Type type, ControllerMethodCodeGenerator cmcg, Object annotation) {
 		PathVar pv = (PathVar) annotation;
-		cmcg.readURI(pv.skipChars());
+		cmcg.readURI(pv.pathAttribute());
 		if (pv.value() == null || (0 == pv.value().trim().length())) {
 			throw new RuntimeException("@PathVar没有指定value");
 		}

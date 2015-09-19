@@ -34,18 +34,10 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator {
         this.cg = cg;
     }
 
-    public void readURI(int skipChars) {
-        if (0 > skipChars) {
-            throw new RuntimeException("@PathVar  skipChars is not less zero");
-        }
+    public void readURI(String pathAttribute) {
         if (!readedURI) {
             readedURI = true;
-            sb.append("String uri =org.jfw.util.WebUtil.normalize(res.getRequestURI());\r\n").append(
-                    "String[] uriArray = uri");
-            if (skipChars > 0) {
-                sb.append(".substring(").append(skipChars).append(")");
-            }
-            sb.append(".split(\"/\");\r\n");
+            sb.append("String[] uriArray = (String[]) req.getAttribute(\"").append(pathAttribute.trim()).append("\");");
         }
     }
 

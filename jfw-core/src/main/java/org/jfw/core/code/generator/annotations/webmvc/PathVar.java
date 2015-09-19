@@ -13,7 +13,6 @@ import org.jfw.core.code.webmvc.handler.buildParam.PathVarHandler;
 public @interface PathVar {
     String value() ;
     boolean encoding() default false;
-    int skipChars() default -1;
-    
+    String pathAttribute() default "org.jfw.web.reqMacthUri_DYN";
     Class<? extends BuildParameter> buildParamClass() default PathVarHandler.class ;
 }

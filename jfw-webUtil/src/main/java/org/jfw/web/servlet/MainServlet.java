@@ -30,13 +30,14 @@ public class MainServlet extends HttpServlet {
     private static final ControllerMethod[][] dynamicUrls = new ControllerMethod[100][0];
     
     
-    public static int prefixLen = 0;
+    public  int prefixLen = 0;
+    public String controllerMap="jfw_web_dispatcher.properties";
     
-    private Properties readDispather()
+    private Properties readDispather() throws ServletException
     {
         Properties result = new Properties();
         try {
-            Enumeration<URL> en = Thread.currentThread().getContextClassLoader().getResources("jfw_web_dispatcher.properties");
+            Enumeration<URL> en = Thread.currentThread().getContextClassLoader().getResources(controllerMap);
             while(en.hasMoreElements()){
                 URL url = en.nextElement();
                 URLConnection con = url.openConnection();
@@ -53,10 +54,12 @@ public class MainServlet extends HttpServlet {
             }
         
         } catch (IOException e) {
+          this.getServletContext().log("read dispather config error", e);
+          throw new ServletException("read dispather config error",e);
         }
         return result;
     }
-    private Map<String,Object> createController(Properties props){
+    private Map<String,Object> createController(Properties props) throws ServletException{
         Map<String,Object> result = new HashMap<String,Object>();
         for(Object val:props.values()){
             String strVal =(String)val;
@@ -67,18 +70,19 @@ public class MainServlet extends HttpServlet {
                 result.put(classname,obj);
             } catch (Exception e) {
                this.getServletContext().log("init controller Object error:",e);
+               throw new ServletException("init controller Object error:",e);
             } 
         }
         return result;
     }
 
-    private void addControllerMethod(String methodName,String url,Object ctrl) throws Exception{
+    private void addControllerMethod(String methodName,String url,Object ctrl) throws ServletException{
         Method method =null;        
         try {
             method =ctrl.getClass().getMethod(methodName, CTRL_METHOD_PARAM_TYPE);
         } catch (Exception e) {
             this.getServletContext().log("load controll error:"+ctrl.getClass().getName()+"."+methodName, e);
-            throw e;
+            throw new ServletException("load controll error:"+ctrl.getClass().getName()+"."+methodName, e);
         }  
         String[] urlp = url.split("/");
         for(String str:urlp)
@@ -109,7 +113,7 @@ public class MainServlet extends HttpServlet {
     }
 
     
-    private void buildControllerMethods(Properties props) throws Exception
+    private void buildControllerMethods(Properties props) throws ServletException
     {
         Map<String,Object> map = this.createController(props);
         for(Map.Entry<Object,Object> entry:props.entrySet()){
@@ -128,6 +132,7 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+       
         String reqUri = WebUtil.normalize(req.getRequestURI());
         reqUri = reqUri.substring(prefixLen);
         req.setAttribute(REQ_MATCH_URI, reqUri);
@@ -153,16 +158,17 @@ public class MainServlet extends HttpServlet {
 
     }
 
+    private void readConfigParamter(){
+        try{
+            this.prefixLen = Integer.parseInt(this.getInitParameter("prefixLen"));
+            String str = this.getInitParameter("controller_map");
+            if(str!=null&&str.trim().length()>0) this.controllerMap = str.trim();
+        }catch(Exception e){}
+    }
     @Override
     public void init() throws ServletException {
-
-
-        try {
-            this.buildControllerMethods(this.readDispather());
-        } catch (Exception e) {
-            // TODO Handler Exception
-            e.printStackTrace();
-        }
+         this.readConfigParamter();
+         this.buildControllerMethods(this.readDispather());
     }
     private static class ControllerMethod{
         private Object obj;

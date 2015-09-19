@@ -1,4 +1,4 @@
-package org.jfw.core.code.generator.annotations.orm;
+package org.jfw.core.code.generator.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InheritedTable {
-    Class<?> value();
-    String tableAlias() default "";
+public @interface InitBean {
 }
