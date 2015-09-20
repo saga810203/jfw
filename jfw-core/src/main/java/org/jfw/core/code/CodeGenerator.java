@@ -80,7 +80,7 @@ public class CodeGenerator {
         if (clazz.isInterface()) {
             subPkgName = "impl";
         } else if (null==clazz.getAnnotation(ThreadSafe.class) || clazz.getAnnotation(ThreadSafe.class).value())  {
-            subPkgName = "extends";
+            subPkgName = "extendz";
         }else {
         	subPkgName="wrap";
         }
@@ -190,7 +190,7 @@ public class CodeGenerator {
                         list.add(prefix + "." + fn);
                     }
                 }
-            } else {
+            } else if (file.isDirectory()){
                 if (prefix == null || prefix.length() == 0) {
                     listClass(file, file.getName(), list);
                 } else {

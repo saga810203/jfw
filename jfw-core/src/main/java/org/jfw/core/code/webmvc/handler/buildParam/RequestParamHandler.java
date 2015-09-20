@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.jfw.core.code.generator.annotations.webmvc.FieldParam;
 import org.jfw.core.code.generator.annotations.webmvc.RequestParam;
+import org.jfw.core.code.utils.Utils;
 import org.jfw.core.code.webmvc.ControllerMethodCodeGenerator;
 import org.jfw.core.code.webmvc.handler.BuildParamHandler;
 
@@ -157,7 +158,8 @@ public class RequestParamHandler extends BuildParamHandler.BuildParameter{
             this.annotation = annotation;
             this.initTargetType(type);
             this.init();  
-            sb.append("param").append(paramIndex).append(" = new ").append(this.targetClass.getName()).append("();");
+            Utils.writeNameOfType(this.targetClass, sb);
+            sb.append(" param").append(paramIndex).append(" = new ").append(this.targetClass.getName()).append("();");
             for(RequestParamTransfer.FieldRequestParam rptFrp:this.frp){
                 RequestParamTransfer rptf = this.getTransfer(rptFrp);
                 if(null==rptf) throw new RuntimeException("无法处理的字段["+this.targetClass.getName()+"."+rptFrp.getValue()+"]");
