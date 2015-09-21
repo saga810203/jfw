@@ -37,9 +37,9 @@ public class BaseArrayRPT extends AbstractRequestParamTransfer {
         } else if (cls == String.class) {
             this.sb.append("params[i]");
         } else if (cls == java.math.BigInteger.class) {
-            this.sb.append("java.math.BigInteger.valueof(params[i])");
+            this.sb.append("new java.math.BigInteger(params[i])");
         } else if (cls == java.math.BigDecimal.class) {
-            this.sb.append("java.math.BigDecimal.valueof(params[i])");
+            this.sb.append("new java.math.BigDecimal(params[i])");
         } else {
             throw new IllegalArgumentException("不支持的类型：" + cls.getName());
         }

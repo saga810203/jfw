@@ -35,9 +35,9 @@ public  class BaseTypeRPT extends AbstractRequestParamTransfer {
         } else if(cls==String.class){
             this.sb.append("param");
         } else if(cls==java.math.BigInteger.class){
-            this.sb.append("java.math.BigInteger.valueof(param)");
+            this.sb.append("new  java.math.BigInteger(param)");
         } else if(cls==java.math.BigDecimal.class){
-            this.sb.append("java.math.BigDecimal.valueof(param)");
+            this.sb.append("new java.math.BigDecimal(param)");
         } else{
             throw new IllegalArgumentException("不支持的类型："+cls.getName());
         }
