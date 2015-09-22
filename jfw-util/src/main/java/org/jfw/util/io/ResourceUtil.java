@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
-import java.util.Properties;
 
 
 public abstract class ResourceUtil {

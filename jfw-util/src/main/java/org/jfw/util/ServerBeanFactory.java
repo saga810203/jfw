@@ -15,11 +15,12 @@ import org.jfw.util.io.MultiInputStreamHandler;
 import org.jfw.util.io.ResourceUtil;
 import org.jfw.util.sort.DependSortService;
 
-public abstract class InitBeanFactory {
-    public static String CONF_FILE = "jfw_init_conf.properties";
+public class ServerBeanFactory {
+    public static String CONF_FILE = "jfw_server_conf.properties";
 
     private static Map<Class<?>, Object> map = new HashMap<Class<?>, Object>();
-    private static LinkedList<Object> beans = new LinkedList<Object>();
+    private static LinkedList<Object> servers = new LinkedList<Object>();
+
     private static Properties load() throws IOException {
         return ResourceUtil.readClassResource(CONF_FILE, new MultiInputStreamHandler<Properties>() {
             private Properties props = new Properties();
@@ -63,7 +64,39 @@ public abstract class InitBeanFactory {
 
     }
 
-   
+    private static void startup(Object obj) throws IllegalAccessException, IllegalArgumentException,
+            InvocationTargetException {
+        Class<?> cls = obj.getClass();
+        for (Method method : cls.getMethods()) {
+            if (method.getName().equals("startup") && (0 == method.getParameterTypes().length)) {
+                method.invoke(obj, ConstData.EMPTY_OBJECT_ARRAY);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Class<" + cls.getName() + "> not found method: void start()");
+    }
+
+    private static void shutdown(Object obj) {
+        Class<?> cls = obj.getClass();
+        for (Method method : cls.getMethods()) {
+            if (method.getName().equals("shutdown") && (0 == method.getParameterTypes().length)) {
+                try {
+                    method.invoke(obj, ConstData.EMPTY_OBJECT_ARRAY);
+                    return;
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+    public static void shutdown() {
+        while (servers.size() > 0) {
+            Object obj = servers.pollLast();
+            shutdown(obj);
+            destroy(obj);
+        }
+        map.clear();
+    }
 
     private static void init(Object obj) throws IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
@@ -74,9 +107,7 @@ public abstract class InitBeanFactory {
                 return;
             }
         }
-        throw new IllegalArgumentException("Class<"+cls.getName()+"> not found method: void init()");
     }
-
     private static void destroy(Object obj) {
         Class<?> cls = obj.getClass();
         for (Method method : cls.getMethods()) {
@@ -90,14 +121,7 @@ public abstract class InitBeanFactory {
         }
     }
 
-    public static void destroy() {
-        for (ListIterator<Object> it = beans.listIterator(); it.hasNext();) {
-              destroy(it.next());
-        }
-        beans.clear();
-        map.clear();
-    }
-    public static void init() throws Exception {
+    public static void startup() throws Exception {
         try {
             List<Class<?>> list = readClass();
             for (ListIterator<Class<?>> it = list.listIterator(); it.hasNext();) {
@@ -105,16 +129,19 @@ public abstract class InitBeanFactory {
                 Object obj = cls.newInstance();
                 init(obj);
                 map.put(cls, obj);
-                beans.addFirst(obj);
+                servers.add(obj);
+            }
+            for (ListIterator<Object> it = servers.listIterator(); it.hasNext();) {
+               startup(it.next());
             }
         } catch (Exception e) {
-            destroy();
+            shutdown();
             throw e;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    public static <T> T get(Class<T> cls){
+    public static <T> T get(Class<T> cls) {
         return (T) map.get(cls);
     }
 
