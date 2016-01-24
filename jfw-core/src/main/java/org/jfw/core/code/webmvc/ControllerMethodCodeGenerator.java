@@ -77,7 +77,7 @@ public class ControllerMethodCodeGenerator implements MethodCodeGenerator {
             readedStringArray = true;
             sb.append("String[] ");
         }
-        sb.append("params =headers.toArray(new String[headers.size()];");
+        sb.append("params =headers.toArray(new String[headers.size()]);");
     }
 
     public void readParameter(String paramName) {

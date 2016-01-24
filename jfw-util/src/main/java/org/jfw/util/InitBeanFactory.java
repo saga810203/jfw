@@ -85,7 +85,7 @@ public abstract class InitBeanFactory {
     private static List<Class<?>> readClass() throws Exception {
         Map<Class<?>,List<Class<?>>> depClass = loadDepends();        
         DependSortService<Class<?>> dss = new DependSortService<Class<?>>();
-       dss.add(load(), depClass);
+        dss.add(load(), depClass);
         return dss.sort();
     }
 
