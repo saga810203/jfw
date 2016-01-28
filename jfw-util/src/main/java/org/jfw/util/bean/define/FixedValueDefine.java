@@ -7,11 +7,10 @@ public class FixedValueDefine extends ValueDefine{
 	
 
 	@Override
-	public void init(BeanFactory bf, String name, Class<?> clazz, boolean isRef, String val) {
+	public void init(BeanFactory bf, String name, Class<?> clazz, boolean isRef, String val) throws ConfigException {
 		this.name = name;
-		this.clazz = clazz;
+		this.clazz = clazz==null?String.class:clazz;
 		
-		if(this.clazz==null)this.clazz = String.class;
 		if(this.clazz.equals(Integer.class) ){
 			this.value = Integer.valueOf(val);
 		} else if(this.clazz.equals(Byte.class) ){
@@ -38,7 +37,7 @@ public class FixedValueDefine extends ValueDefine{
 			try {
 				this.value = Class.forName(val);
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException("invalid class name:"+val,e);
+				throw new ConfigException("invalid class name["+val+"]",e);
 			}
 		} 
 	}

@@ -7,39 +7,67 @@ import java.util.Map;
 
 import org.jfw.util.bean.BeanBuilder;
 import org.jfw.util.bean.BeanFactory;
+import org.jfw.util.bean.InValidBeanConfigException;
 
 public abstract class BeanDefine {
+	private static final String LIST_GROUP = "list-group-";
 	private BeanFactory factory;    	
 	private boolean singleton = true;
 	private String key;
 	private String name;
 	private String value;
+	private String groupName = null;;
+	
+
 	private List<String> depends = new ArrayList<String>();	
 	
 	protected BeanDefine(BeanFactory bf,String key,String value){
 		this.factory = bf;
 		this.key = key;
 		this.value = value;
-		this.name= key;
-		int i = name.indexOf("::");
-		if(i>0)this.name = name.substring(0, i);
-		this.singleton = key.indexOf("::prototype")>0;
-	}
-	
-	public void addAttributes(BeanFactory bf,Map<String,String> attrs){
-		for(Map.Entry<String,String> entry:attrs.entrySet()){
-			this.addAttributeEntry(bf,entry.getKey(),entry.getValue());
+		List<String> list = BeanFactory.split(key,"::", false);		
+		this.name= list.get(0);
+		this.singleton = list.contains("prototype");
+		for(int i = 1; i < list.size(); ++i){
+			String s = list.get(i);
+			if(s.startsWith(LIST_GROUP)&& !s.equals(LIST_GROUP)){
+				this.groupName = s.substring(LIST_GROUP.length());
+			}
 		}
 	}
-	public void addAttributeEntry(BeanFactory bf,String vkey,String vVal){
+	
+	public boolean  isRef(List<BeanDefine> list,String beanid){
+		if(this.depends.contains(beanid)) return true;
+		for(String b:this.depends){
+			BeanDefine bd = null;
+			for(BeanDefine bdd:list){
+				if(b.equals(bdd.getName())) {
+					bd = bdd; 
+					break;
+				}
+			}
+			if(bd!=null && bd.isRef(list, beanid)) return true;			
+		}
+		return false;		
+	}
+	
+	public void addAttributes(BeanFactory bf,Map<String,String> attrs) throws InValidBeanConfigException{
+		for(Map.Entry<String,String> entry:attrs.entrySet()){
+			try {
+				this.addAttributeEntry(bf,entry.getKey(),entry.getValue());
+			} catch (ConfigException e) {
+				throw new InValidBeanConfigException(entry.getKey(), entry.getValue(), e.getMessage(), e.getCause());
+			}
+		}
+	}
+	public void addAttributeEntry(BeanFactory bf,String vkey,String vVal) throws ConfigException{
 		if(vkey.startsWith(this.name+".")){
 			this.addAttributeInternal(bf,vkey.substring(this.name.length()+1),vVal);
 		}
 	}
-	public abstract void addAttributeInternal(BeanFactory bf,String attrName,String attrVal);	
+	public abstract void addAttributeInternal(BeanFactory bf,String attrName,String attrVal) throws ConfigException;	
 	
 	
-	public abstract Object buildBean(BeanFactory bf);
 	public abstract BeanBuilder buildBeanBuilder(BeanFactory bf);
 	
 	public boolean addDependBean(String beanid){
@@ -68,7 +96,9 @@ public abstract class BeanDefine {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	public String getGroupName() {
+		return groupName;
+	}
 	public String getValue() {
 		return value;
 	}

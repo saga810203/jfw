@@ -17,7 +17,7 @@ public abstract class ValueDefine implements Comparable<ValueDefine> {
 		return clazz;
 	}
 	
-	public abstract void init(BeanFactory bf,String name,Class<?> clazz,boolean isRef,String val);
+	public abstract void init(BeanFactory bf,String name,Class<?> clazz,boolean isRef,String val) throws ConfigException;
 	public abstract Object getValue(BeanFactory bf);
 	
 	public static Class<?> converToValueClass(String cls){
@@ -49,10 +49,10 @@ public abstract class ValueDefine implements Comparable<ValueDefine> {
 		throw new RuntimeException("UnsupportedClass["+cls+"] with fixvalue in BeanFactory cofig");
 	}
 	
-	public static ValueDefine build(BeanFactory bf,String name,Class<?> clazz,boolean isRef,String val){
+	public static ValueDefine build(BeanFactory bf,String name,Class<?> clazz,boolean isRef,String val) throws ConfigException{
 		ValueDefine vd = null;
 		if(isRef){
-			if(!bf.contains(val))throw new RuntimeException("notfound bean["+val+"]");
+			if(!bf.contains(val))throw new ConfigException("notfound bean["+val+"]");
 			if(bf.isSingletonBean(val)){
 				vd = new RefSingleBeanVD();
 			}else{
