@@ -3,43 +3,41 @@ package org.jfw.util.scheduler.container;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jfw.core.ServiceInfo;
-import org.jfw.core.ServiceInfo.ServiceStatus;
-import org.jfw.log.LogFactroy;
-import org.jfw.log.Logger;
+import org.jfw.util.log.LogFactory;
+import org.jfw.util.log.Logger;
 import org.jfw.util.scheduler.Job;
 import org.jfw.util.scheduler.JobInfo;
 
 public class BaseJobContainer implements JobContainer
 {
 
-	private static final Logger	log	= LogFactroy.getLog(BaseJobContainer.class);
+	private static final Logger	log	= LogFactory.getLog(BaseJobContainer.class);
 
-	public static class JobContainerInfo implements ServiceInfo
-	{
-
-		private long		           staredTime	= -1;
-		private long		           stopedTime	= -1;
-		private volatile ServiceStatus	statu		= ServiceStatus.Created;
-
-		@Override
-		public long getStartedTime()
-		{
-			return this.staredTime;
-		}
-
-		@Override
-		public long getStopedTime()
-		{
-			return this.stopedTime;
-		}
-
-		@Override
-		public ServiceStatus getStatu()
-		{
-			return this.statu;
-		}
-	}
+//	public static class JobContainerInfo implements ServiceInfo
+//	{
+//
+//		private long		           staredTime	= -1;
+//		private long		           stopedTime	= -1;
+//		private volatile ServiceStatus	statu		= ServiceStatus.Created;
+//
+//		@Override
+//		public long getStartedTime()
+//		{
+//			return this.staredTime;
+//		}
+//
+//		@Override
+//		public long getStopedTime()
+//		{
+//			return this.stopedTime;
+//		}
+//
+//		@Override
+//		public ServiceStatus getStatu()
+//		{
+//			return this.statu;
+//		}
+//	}
 
 	public static final String	   C_SETSCHEDULERINTERVAL	= "C";
 	public static final String	   C_ADDJOB	              = "A";
@@ -48,7 +46,7 @@ public class BaseJobContainer implements JobContainer
 	public static final String	   C_SETMINWORKER	      = "MIW";
 	public static final String	   C_SETMAXIDLETIME	      = "MXI";
 
-	private JobContainerInfo	   si	                  = new JobContainerInfo();
+//	private JobContainerInfo	   si	                  = new JobContainerInfo();
 
 	/*
 	 * 所有job
@@ -61,7 +59,7 @@ public class BaseJobContainer implements JobContainer
 	private int	                   minWorkerThread	      = 0;
 	private long	               jobSchedulerInterval	  = 30 * 1000L;
 
-	@Override
+//	@Override
 	synchronized public void start()
 	{
 		log.info("启动BaseJobContainer类实例：开始");

@@ -27,7 +27,7 @@ public abstract class BeanDefine {
 		this.value = value;
 		List<String> list = BeanFactory.split(key,"::", false);		
 		this.name= list.get(0);
-		this.singleton = list.contains("prototype");
+		this.singleton = !list.contains("prototype");
 		for(int i = 1; i < list.size(); ++i){
 			String s = list.get(i);
 			if(s.startsWith(LIST_GROUP)&& !s.equals(LIST_GROUP)){
