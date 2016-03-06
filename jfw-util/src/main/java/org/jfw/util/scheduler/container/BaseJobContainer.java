@@ -82,12 +82,12 @@ public class BaseJobContainer implements JobContainer
 
 		}
 		this.mainThread.start();
-		this.si.statu = ServiceStatus.Running;
-		this.si.staredTime = System.currentTimeMillis();
+//		this.si.statu = ServiceStatus.Running;
+//		this.si.staredTime = System.currentTimeMillis();
 		log.info("启动BaseJobContainer类实例：结束");
 	}
 
-	@Override
+//	@Override
 	synchronized public void stop()
 	{
 		log.info("停止BaseJobContainer类实例：开始");
@@ -97,23 +97,23 @@ public class BaseJobContainer implements JobContainer
 			this.mainThread.addCommand(BaseJobContainerThread.T_STOP, null);
 			this.mainThread.interrupt();
 			this.mainThread = null;
-			this.si.statu = ServiceStatus.Stoped;
-			this.si.stopedTime = System.currentTimeMillis();
+//			this.si.statu = ServiceStatus.Stoped;
+//			this.si.stopedTime = System.currentTimeMillis();
 		}
 		log.info("停止BaseJobContainer类实例：结束");
 	}
 
-	@Override
-	synchronized public ServiceInfo getServiceInfo()
-	{
-		return this.si;
-	}
+//	@Override
+//	synchronized public ServiceInfo getServiceInfo()
+//	{
+//		return this.si;
+//	}
 
-	@Override
-	synchronized public void init()
-	{
-		this.si.statu = ServiceStatus.Inited;
-	}
+//	@Override
+//	synchronized public void init()
+//	{
+//		this.si.statu = ServiceStatus.Inited;
+//	}
 
 	@Override
 	synchronized public JobContainer addJob(Job job)

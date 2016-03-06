@@ -6,19 +6,18 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.jfw.log.LogFactroy;
-import org.jfw.log.Logger;
+//import org.jfw.log.LogFactroy;
+//import org.jfw.log.Logger;
 import org.jfw.util.scheduler.Job;
 import org.jfw.util.scheduler.JobExecutor;
 import org.jfw.util.scheduler.JobInfo;
 import org.jfw.util.scheduler.container.BaseJobContainer.Command;
 import org.jfw.util.scheduler.impl.JobWorkerThreadPool;
-import org.jfw.utils.DateUtils;
+//import org.jfw.utils.DateUtils;
 
 public class BaseJobContainerThread extends Thread
 {
-	private static final Logger	             log	                     = LogFactroy
-	                                                                             .getLog(BaseJobContainerThread.class);
+//	private static final Logger	             log	                     = LogFactroy.getLog(BaseJobContainerThread.class);
 	public static final String	             T_STOP	                     = "STOP";
 	private boolean	                         isRunning	                 = true;
 	private long	                         jobSchedulerInterval	     = 1L;
@@ -45,7 +44,7 @@ public class BaseJobContainerThread extends Thread
 		if (0 > list.indexOf(job))
 		{
 			list.add(job);
-			log.debug("Job[id=" + job.getId() + "]加入等待调度队列中，下次执行时间为：" + DateUtils.formatTimeStamp(key.longValue()));
+//			log.debug("Job[id=" + job.getId() + "]加入等待调度队列中，下次执行时间为：" + DateUtils.formatTimeStamp(key.longValue()));
 		}
 		target.put(key, list);
 	}
@@ -111,7 +110,7 @@ public class BaseJobContainerThread extends Thread
 			JobExecutor je = it.next();
 			Job job = je.getJob();
 			JobInfo ji = job.getJobInfo();
-			log.debug("JOB[id=" + job.getId() + "]分配了工作线程");
+//			log.debug("JOB[id=" + job.getId() + "]分配了工作线程");
 			if (ji.isMoreRunningJob())
 			{
 				this.addJobToWaitQueue(job, false);
@@ -140,14 +139,14 @@ public class BaseJobContainerThread extends Thread
 			{
 				je.cancleNow();
 				it.remove();
-				log.debug("JOB[id=" + je.getJob().getId() + "]被取消执行");
+//				log.debug("JOB[id=" + je.getJob().getId() + "]被取消执行");
 			}
 		}
 	}
 
 	private void removeJobFromWaitQueue(Job job)
 	{
-		log.debug("将JOB[id=" + job.getId() + "]从调度队列中移除");
+//		log.debug("将JOB[id=" + job.getId() + "]从调度队列中移除");
 		SortedMap<Long, LinkedList<Job>> target = this.waitQueueForSingleJobs;
 		if (job.getJobInfo().isMoreRunningJob())
 			target = this.waitQueueForMultipleJobs;
@@ -171,7 +170,7 @@ public class BaseJobContainerThread extends Thread
 	{
 		interruptJob(job.getId());
 		this.removeJobFromWaitQueue(job);
-		log.debug("JOB[id=" + job.getId() + "]从工作线程中移除");
+//		log.debug("JOB[id=" + job.getId() + "]从工作线程中移除");
 	}
 
 	public void addCommand(String shell, Object paramter)
@@ -247,7 +246,7 @@ public class BaseJobContainerThread extends Thread
 				}
 			} catch (Exception e)
 			{
-				log.error("在处理命令[command=" + c.shell + ";parameter=" + c.paramter.toString() + "]", e);
+//				log.error("在处理命令[command=" + c.shell + ";parameter=" + c.paramter.toString() + "]", e);
 			}
 		}
 	}
@@ -261,7 +260,7 @@ public class BaseJobContainerThread extends Thread
 			{
 				Job job = je.getJob();
 				JobInfo ji = job.getJobInfo();
-				log.debug("JOB[id=" + job.getId() + "]上一次执行结束");
+//				log.debug("JOB[id=" + job.getId() + "]上一次执行结束");
 				// if(ji.getJobSchedulerMode() ==
 				// JobSchedulerMode.IntervalByEnd)
 				if (!ji.isMoreRunningJob())
