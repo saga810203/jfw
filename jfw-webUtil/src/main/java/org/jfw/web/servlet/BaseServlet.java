@@ -12,9 +12,24 @@ import org.jfw.util.web.WebHandlerContext;
 
 public class BaseServlet extends HttpServlet{
 	private static final long serialVersionUID = -1452578683832313005L;
+
+	private static boolean startSuccess = true;
+	
+	
+	
+	
+	
 	
 	protected int prefixLen = 0;
 	protected int viewType = 0;
+	
+	
+	public static boolean isStartSuccess(){
+		return startSuccess;
+	}
+	protected static void failStart(){
+		startSuccess= false;
+	}
 	
 	
 

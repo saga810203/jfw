@@ -11,8 +11,8 @@ public class Main {
 //            System.out.println(i);
 //        }
         
-        String aa ="/122/234/";
-        String[] s = aa.split("/");
+        String aa ="a,b;c";
+        String[] s = aa.split("[,;]");
         for(int i = 0 ; i < s.length ; ++i)
             System.out.println(i+":"+s[i]);
         
