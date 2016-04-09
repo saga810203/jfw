@@ -1,9 +1,6 @@
 package org.jfw.util.execut;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import org.jfw.util.ConstData;
 
 public class SchedulerBean {
 	private Object bean;

@@ -82,6 +82,9 @@ public class BeanFactory {
 		result.addAll(this.parent.getBeansWithGroup(groupname));
 		return result;
 	}
+	public List<String> getBeanIdsWithGroup(String groupname){
+		return this.groups.get(groupname);
+	}
 
 	
 
