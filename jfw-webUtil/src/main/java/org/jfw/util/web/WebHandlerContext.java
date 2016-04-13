@@ -1,7 +1,6 @@
 package org.jfw.util.web;
 
 import java.lang.reflect.Method;
-import java.sql.ResultSetMetaData;
 import java.util.HashMap;
 import java.util.Map;
 
